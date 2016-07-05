@@ -20,9 +20,9 @@ public class Application {
             }
 
         SpringApplication.run(Application.class, args);
-        logger.debug("Made application launch.");
+        if (DebugMode.isDebug())
+            logger.debug("Made application launch.");
 
     }
-
 
 }

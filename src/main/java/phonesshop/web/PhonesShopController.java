@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import phonesshop.domain.PhoneForList;
 import phonesshop.domain.Phones;
 import phonesshop.domain.PhonesRepository;
+import phonesshop.util.DebugMode;
 
 import java.util.List;
 
@@ -32,7 +33,8 @@ public class PhonesShopController {
     @RequestMapping("/phoneslist/page{cur:[\\d]+}for{countonpage:[\\d]+}")
     public List<PhoneForList> findAllPage(@PathVariable int cur, @PathVariable int countonpage) throws Exception {
         try {
-            logger.debug("Get page " + cur + " phones list. Count phones on page is " + countonpage);
+            if (DebugMode.isDebug())
+                logger.debug("Get page " + cur + " phones list. Count phones on page is " + countonpage);
 
             // test correct value cur and countpage
             if ((countonpage > 200)||(countonpage < 5) ) {
