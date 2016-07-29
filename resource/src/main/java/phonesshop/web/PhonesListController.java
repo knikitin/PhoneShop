@@ -15,12 +15,9 @@ import phonesshop.util.DebugMode;
  * Created by kostya.nikitin on 6/29/2016.
  */
 @RestController
-public class PhonesShopController {
+public class PhonesListController {
 
     private static final Logger logger = Logger.getLogger("forPhonesShop");
-
-    @Autowired
-    JdbcTemplate jdbcTemplate;
 
     @Autowired
     private PhonesRepository phonesRepository;

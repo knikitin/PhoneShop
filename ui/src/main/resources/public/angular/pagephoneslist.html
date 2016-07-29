@@ -5,7 +5,7 @@
             <div class="text-right">
                 <form class="form-inline">
                     <div class="form-group">
-                        <label for="numberOfPhone">Количество телефонов на странице</label>
+                        <label for="numberOfPhone">Count of phones per page</label>
                         <select id="numberOfPhone" ng-model="phonesList.phonesOnListWithAct" class="ng-not-empty form-control">
                             <option value="20">20</option>
                             <option value="50">50</option>
@@ -24,10 +24,13 @@
            <div ng-repeat="phone in phonesList.phones" class="col-sm-6 col-md-4">
                <div class="thumbnail">
                    <div class="text-center" >
-                       <img ng-src="{{phonesList.getImgUrl(phone.id)}}" alt="Phone img" height="200">
+                       <img ng-show="!authenticated" ng-src="{{phonesList.getImgUrl(phone.id)}}" alt="Phone img" height="200px">
+                       <a ng-href="#phone/{{phone.id}}" ng-show="authenticated"><img ng-src="{{phonesList.getImgUrl(phone.id)}}" alt="Phone img" style="height: 200px;"> </a>
                    </div>
                    <div class="caption phone-caption">
-                       <strong>{{phone.model}} </strong><br>
+                       <strong ng-show="!authenticated" >{{phone.model}} </strong>
+                       <a ng-href="#phone/{{phone.id}}" ng-show="authenticated"><strong>{{phone.model}} </strong></a>
+                       <br>
                        Brand : {{phone.brand}} <br>
                        Screen size : {{phone.screenSize}} <br>
                        Screen resolution : {{phone.screenResolution}} <br>

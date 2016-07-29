@@ -1,9 +1,5 @@
-( function(){
-
-var app = angular.module('app', ['ngRoute']);
-
-
-app.config(['$routeProvider', function($routeProvider) {
+angular.module('app', [ 'ngRoute' ])
+.config(function($routeProvider, $httpProvider) {
 
   $routeProvider
     .when('/', {
@@ -16,12 +12,49 @@ app.config(['$routeProvider', function($routeProvider) {
       controller:'PhoneListController as phonesList',
       templateUrl:'angular/pagephoneslist.html',
     })
+    .when('/phone/:phoneId', {
+      controller:'PhoneViewController as phone',
+      templateUrl:'angular/pagephone.html',
+    })
     .otherwise({
       redirectTo:'/'
     });
-}])
 
-app.controller('PhoneListController', [ '$http', '$routeParams', '$location', function($http, $routeParams, $location) {
+	$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+	$httpProvider.defaults.headers.common['Accept'] = 'application/json';
+
+})
+.controller('navigation',
+    function($rootScope, $http, $location, $route) {
+
+	var self = this;
+
+    function setAutentication(authenticated, name, authorities){
+        $rootScope.authenticated = authenticated;
+        $rootScope.name = name;
+        $rootScope.authorities = authorities;
+    }
+
+	$http.get('user').then(function(response) {
+ 		if (response.data.name) {
+		    setAutentication(true, response.data.name, response.data.userAuthentication.authorities)
+		} else {
+		    setAutentication(false, "", {})
+		}
+	}, function() {
+        setAutentication(false, "", {})
+	});
+
+	self.credentials = {};
+
+	self.logout = function() {
+		$http.post('logout', {}).finally(function() {
+			setAutentication(false, "", {})
+			$location.path("/");
+		});
+	}
+})
+.controller('PhoneListController', [ '$http', '$routeParams', '$location', function($http, $routeParams, $location) {
   var phonesList = this;
 
   phonesList.$routeParams = $routeParams;
@@ -40,7 +73,6 @@ app.controller('PhoneListController', [ '$http', '$routeParams', '$location', fu
           phonesList.phonesOnList = value;
           localStorage.phonesOnList = phonesList.phonesOnList;
           $location.url("/catalog/page-"+newPage+"?phonesCount="+phonesList.phonesOnList);
-          //phonesList.phones = getPhonesList(phonesList.phonesOnList);
       }
   })
 
@@ -48,7 +80,7 @@ app.controller('PhoneListController', [ '$http', '$routeParams', '$location', fu
        return {caption: captionIn, link : '#catalog/page-'+pageId+"?phonesCount="+phonesList.phonesOnList, class: classId}
   }
 
-  $http.get("http://localhost:8080/phoneslist/page"+Number(phonesList.pageId)+"for"+Number(phonesList.phonesOnList)).success(function(data){
+  $http.get("http://localhost:8080/resource/phoneslist/page"+Number(phonesList.pageId)+"for"+Number(phonesList.phonesOnList)).success(function(data){
         phonesList.phones = data.phonesList;
         phonesList.pageCount = data.pageCount;
 
@@ -67,10 +99,29 @@ app.controller('PhoneListController', [ '$http', '$routeParams', '$location', fu
       });
 
   phonesList.getImgUrl = function(id){
-     return "/img/"+id.toString(16)+".jpg";
+     return "/resource/img/"+id.toString(16)+".jpg";
   };
 
 
 }])
+.controller('PhoneViewController', [ '$http', '$routeParams', function($http, $routeParams) {
+  var phone = this;
 
-})();
+  phone.$routeParams = $routeParams;
+  var i = phone.$routeParams["phoneId"];
+  phone.phoneId = !isNaN(i) && (i>0) && i||1;
+
+  phone.phone = {};
+
+  $http.get("http://localhost:8080/resource/phone/"+Number(phone.phoneId)).success(function(data){
+        phone.phone = data;
+
+      });
+
+  phone.getImgUrl = function(id){
+     return (id)?"/resource/img/"+id.toString(16)+".jpg":"";
+  };
+
+
+}])
+;

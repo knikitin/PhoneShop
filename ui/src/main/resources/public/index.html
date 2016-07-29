@@ -1,0 +1,62 @@
+<!doctype html>
+<html ng-app = "app">
+<head>
+	<meta charset="utf-8">
+	<title> Phones Shop</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/phoneshop.css">
+	<script src="js/angular.min.js" type="text/javascript"></script>
+	<script src="js/angular-route.min.js" type="text/javascript"></script>
+	<script src="js/app.js"></script>
+
+	<style type="text/css">
+[ng\:cloak], [ng-cloak], .ng-cloak {
+	display: none !important;
+}
+</style>
+</head>
+
+<body ng-cloak class="ng-cloak">
+
+    <div class="container">
+        <row>
+            <div class="col-md-9 col-xs-12">
+                <img src="img/caption.png" alt="Phones Shop img" class="mainlogo">
+            </div>
+
+            <div class="col-md-3 col-xs-12">
+                <div ng-controller="navigation as nav" class="container">
+                    <div ng-show="!authenticated">
+                        You don't authorized.
+                        <form action="login">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </form>
+                    </div>
+                    <div ng-show="authenticated">
+                        Hello, {{name}}!
+                        <button type="button" class="btn btn-primary" ng-click="nav.logout()">Logout</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </row>
+    </div>
+
+    <div class="container">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href = "#catalog" > Catalog </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div ng-view></div>
+
+
+</body>
+</html>

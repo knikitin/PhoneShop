@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by kostya.nikitin on 6/30/2016.
  */
-public class PhonesShopControllerTest extends ApplicationTests  {
+public class PhonesListControllerTest extends ApplicationTests  {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
