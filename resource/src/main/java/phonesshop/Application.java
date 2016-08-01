@@ -3,6 +3,7 @@ package phonesshop;
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -35,9 +36,9 @@ public class Application extends ResourceServerConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers( "/phoneslist/**","/img/**").permitAll()
-                .antMatchers("/phone/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/directorynavigations", "/wirelesstechnology").permitAll()
+                .antMatchers("/phone/**", "/directorynavigations/**", "/wirelesstechnology/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
-
     }
 
 }
