@@ -36,8 +36,8 @@ public class Application extends ResourceServerConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers( "/phoneslist/**","/img/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/directorynavigations", "/wirelesstechnology").permitAll()
-                .antMatchers("/phone/**", "/directorynavigations/**", "/wirelesstechnology/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/directorynavigations", "/wirelesstechnology", "/phones/**").permitAll()
+                .antMatchers("/phones/**", "/directorynavigations/**", "/wirelesstechnology/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
     }
 

@@ -113,7 +113,7 @@ angular.module('app', [ 'ngRoute' ])
 
   phone.phone = {};
 
-  $http.get("http://localhost:8080/resource/phone/"+Number(phone.phoneId)).success(function(data){
+  $http.get("http://localhost:8080/resource/phones/"+Number(phone.phoneId)).success(function(data){
         phone.phone = data;
 
       });

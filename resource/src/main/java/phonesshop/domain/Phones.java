@@ -1,5 +1,6 @@
 package phonesshop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.log4j.Logger;
 
 import javax.persistence.*;
@@ -52,6 +53,10 @@ public class Phones {
 
     @Column( name = "sim_number")
     private Integer simNumber;
+
+    private Set<DirectoryNavigations> directoryNavigations;
+
+    private Set<WirelessTechnology> wirelessTechnology;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -199,5 +204,28 @@ public class Phones {
         this.simNumber = simNumber;
     }
 
+    @ManyToMany( fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }  )
+    @JoinTable(name = "phone_navigation",
+            joinColumns = @JoinColumn(name = "phone_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "navigation_id", referencedColumnName = "id"))
+    public Set<DirectoryNavigations> getDirectoryNavigations() {
+        return directoryNavigations;
+    }
+
+    public void setDirectoryNavigations(Set<DirectoryNavigations> directoryNavigations) {
+        this.directoryNavigations = directoryNavigations;
+    }
+
+    @ManyToMany( fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }  )
+    @JoinTable(name = "phone_wireless",
+            joinColumns = @JoinColumn(name = "phone_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "wireless_id", referencedColumnName = "id"))
+    public Set<WirelessTechnology> getWirelessTechnology() {
+        return wirelessTechnology;
+    }
+
+    public void setWirelessTechnology(Set<WirelessTechnology> wirelessTechnology) {
+        this.wirelessTechnology = wirelessTechnology;
+    }
 
 }

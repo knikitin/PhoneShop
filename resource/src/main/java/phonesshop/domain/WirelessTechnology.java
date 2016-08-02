@@ -1,6 +1,9 @@
 package phonesshop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Set;
 
 /**
  * Created by kostya.nikitin on 7/29/2016.
@@ -11,6 +14,8 @@ public class WirelessTechnology {
     private long id;
 
     private String technology;
+
+    private Set<Phones> phones;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,4 +41,15 @@ public class WirelessTechnology {
 
     public WirelessTechnology() {
     }
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "wirelessTechnology", cascade = CascadeType.ALL )
+    @JsonIgnore
+    public Set<Phones> getPhones() {
+        return phones;
+    }
+
+    public void setPhones(Set<Phones> phones) {
+        this.phones = phones;
+    }
+
 }
