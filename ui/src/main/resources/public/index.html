@@ -50,6 +50,9 @@
                     <li>
                         <a href = "#catalog" > Catalog </a>
                     </li>
+                    <li ng-show="checkRoles(authorities,'ROLE_ADMIN')">
+                        <a ng-href="#phone/add"> Add phone </a>
+                    </li>
                 </ul>
             </div>
         </nav>

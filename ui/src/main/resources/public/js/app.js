@@ -12,6 +12,14 @@ angular.module('app', [ 'ngRoute' ])
       controller:'PhoneListController as phonesList',
       templateUrl:'angular/pagephoneslist.html',
     })
+    .when('/phone/add', {
+      controller:'PhoneAddController as phone',
+      templateUrl:'angular/pageaddphone.html',
+    })
+    .when('/phone/:phoneId/edit', {
+      controller:'PhoneEditController as phone',
+      templateUrl:'angular/pageeditphone.html',
+    })
     .when('/phone/:phoneId', {
       controller:'PhoneViewController as phone',
       templateUrl:'angular/pagephone.html',
@@ -33,6 +41,15 @@ angular.module('app', [ 'ngRoute' ])
         $rootScope.authenticated = authenticated;
         $rootScope.name = name;
         $rootScope.authorities = authorities;
+        $rootScope.checkRoles = function (authorities, role){
+            for(i in authorities){
+                if (authorities[i].authority === role){
+                    return true;
+                }
+            }
+            return false;
+        };
+
     }
 
 	$http.get('user').then(function(response) {
@@ -122,6 +139,30 @@ angular.module('app', [ 'ngRoute' ])
      return (id)?"/resource/img/"+id.toString(16)+".jpg":"";
   };
 
+
+}])
+.controller('PhoneEditController', [ '$http', '$routeParams', function($http, $routeParams) {
+  var phone = this;
+
+  phone.$routeParams = $routeParams;
+  var i = phone.$routeParams["phoneId"];
+  phone.phone = {};
+
+  phone.phoneId = !isNaN(i) && (i>0) && i||1;
+  $http.get("http://localhost:8080/resource/phones/"+Number(phone.phoneId)).success(function(data){
+        phone.phone = data;
+      });
+
+  phone.getImgUrl = function(id){
+     return (id)?"/resource/img/"+id.toString(16)+".jpg":"";
+  };
+
+
+}])
+.controller('PhoneAddController', [ '$http', function($http) {
+  var phone = this;
+
+  phone.phone = {};
 
 }])
 ;

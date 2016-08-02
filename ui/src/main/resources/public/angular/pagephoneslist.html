@@ -24,12 +24,12 @@
            <div ng-repeat="phone in phonesList.phones" class="col-sm-6 col-md-4">
                <div class="thumbnail">
                    <div class="text-center" >
-                       <img ng-show="!authenticated" ng-src="{{phonesList.getImgUrl(phone.id)}}" alt="Phone img" height="200px">
-                       <a ng-href="#phone/{{phone.id}}" ng-show="authenticated"><img ng-src="{{phonesList.getImgUrl(phone.id)}}" alt="Phone img" style="height: 200px;"> </a>
+                       <a ng-href="#phone/{{phone.id}}" ng-show="!checkRoles(authorities,'ROLE_ADMIN')"><img ng-src="{{phonesList.getImgUrl(phone.id)}}" alt="Phone img" style="height: 200px;"> </a>
+                       <a ng-href="#phone/{{phone.id}}/edit" ng-show="checkRoles(authorities,'ROLE_ADMIN')"><img ng-src="{{phonesList.getImgUrl(phone.id)}}" alt="Phone img" style="height: 200px;"> </a>
                    </div>
                    <div class="caption phone-caption">
-                       <strong ng-show="!authenticated" >{{phone.model}} </strong>
-                       <a ng-href="#phone/{{phone.id}}" ng-show="authenticated"><strong>{{phone.model}} </strong></a>
+                       <a ng-href="#phone/{{phone.id}}" ng-show="!checkRoles(authorities,'ROLE_ADMIN')"><strong>{{phone.model}} </strong></a>
+                       <a ng-href="#phone/{{phone.id}}/edit" ng-show="checkRoles(authorities,'ROLE_ADMIN')"><strong>{{phone.model}} </strong></a>
                        <br>
                        Brand : {{phone.brand}} <br>
                        Screen size : {{phone.screenSize}} <br>
