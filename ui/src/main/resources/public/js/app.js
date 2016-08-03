@@ -1,4 +1,4 @@
-angular.module('app', [ 'ngRoute' ])
+angular.module('app', [ 'ngRoute', 'checklist-model' ])
 .config(function($routeProvider, $httpProvider) {
 
   $routeProvider
@@ -156,6 +156,24 @@ angular.module('app', [ 'ngRoute' ])
       },
       function(response){
           alert("An error occurred when load the information about the phone. Try again.(Error with status: " + response.status +")")
+          $location.path("/");
+      });
+
+  phone.directoryNavigations = [];
+  $http.get("http://localhost:8080/resource/directorynavigations").then(function(response){
+        phone.directoryNavigations = response.data;
+      },
+      function(response){
+          alert("An error occurred when load the directory navigation. Try again.(Error with status: " + response.status +")")
+          $location.path("/");
+      });
+
+  phone.wirelessTechnology = [];
+  $http.get("http://localhost:8080/resource/wirelesstechnology").then(function(response){
+        phone.wirelessTechnology = response.data;
+      },
+      function(response){
+          alert("An error occurred when load the wireless technology. Try again.(Error with status: " + response.status +")")
           $location.path("/");
       });
 

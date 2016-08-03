@@ -106,6 +106,27 @@
         </div>
 
         <div class="form-group">
+            <label class="col-sm-2 control-label">Directory navigation</label>
+            <div class="col-sm-10">
+                <div class="checkbox" ng-repeat="nav in phone.directoryNavigations" >
+                    <label>
+                        <input type="checkbox" data-checklist-model="phone.phone.directoryNavigations" data-checklist-value="nav"> {{nav.typeNavigation}}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Wireless technologies</label>
+            <div class="col-sm-10">
+                <div class="checkbox" ng-repeat="tech in phone.wirelessTechnology">
+                    <label>
+                        <input type="checkbox" data-checklist-model="phone.phone.wirelessTechnology" data-checklist-value="tech"> {{tech.technology}}
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button class="btn btn-primary" ng-click="phone.save()"> Save </button>
                 <button class="btn btn-primary" ng-click="phone.cancel()"> Cancel </button>
