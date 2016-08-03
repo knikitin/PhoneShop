@@ -159,10 +159,33 @@ angular.module('app', [ 'ngRoute' ])
 
 
 }])
-.controller('PhoneAddController', [ '$http', function($http) {
+.controller('PhoneAddController', [ '$http', '$location', function($http, $location) {
   var phone = this;
-
+  var stateAdd = true;
   phone.phone = {};
+  phone.phone.model = "";
+  phone.phone.brand = "";
+
+  phone.add = function() {
+    if (stateAdd){
+        if ((phone.phone.model.length>0) && (phone.phone.brand.length>0)){
+           $http.post('http://localhost:8080/resource/phones', phone.phone).then(
+                function(response){//вызвать переход в редактирование этого телефона
+                    $location.url("/phone/"+response.data.id+"/edit");
+                },
+                function(){
+                    alert("An error occurred when adding the phone. Try again.(Error with status: " + response.status +")")
+                });
+           stateAdd = false;
+        } else
+        { alert("Error in data. All field must be filled")
+        }
+    }
+  }
+
+  phone.cancel = function() {
+    $location.path("/");
+  }
 
 }])
 ;
