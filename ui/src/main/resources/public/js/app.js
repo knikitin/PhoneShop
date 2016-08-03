@@ -141,17 +141,48 @@ angular.module('app', [ 'ngRoute' ])
 
 
 }])
-.controller('PhoneEditController', [ '$http', '$routeParams', function($http, $routeParams) {
+.controller('PhoneEditController', [ '$http', '$routeParams', '$location', function($http, $routeParams, $location) {
   var phone = this;
 
   phone.$routeParams = $routeParams;
   var i = phone.$routeParams["phoneId"];
   phone.phone = {};
+  phone.phone.model = "";
+  phone.phone.brand = "";
 
   phone.phoneId = !isNaN(i) && (i>0) && i||1;
-  $http.get("http://localhost:8080/resource/phones/"+Number(phone.phoneId)).success(function(data){
-        phone.phone = data;
+  $http.get("http://localhost:8080/resource/phones/"+Number(phone.phoneId)).then(function(response){
+        phone.phone = response.data;
+      },
+      function(response){
+          alert("An error occurred when load the information about the phone. Try again.(Error with status: " + response.status +")")
+          $location.path("/");
       });
+
+  phone.save = function() {
+    if ((phone.phone.model.length>0) && (phone.phone.brand.length>0)){
+       $http.put('http://localhost:8080/resource/phones/'+phone.phoneId, phone.phone).then(
+            function(response){
+                $location.url("/phone/"+response.data.id+"/edit");
+                if (response.data.id>0) {
+                    alert("Card of phone was saved.");
+                    $location.path("/");
+                } else{
+                    alert("Unknown error in data. (Error with status: " + response.status +")");
+                }
+            },
+            function(response){
+                alert("An error occurred when saving the phone. Try again.(Error with status: " + response.status +")")
+            });
+    } else
+    { alert("Error in data. Model and brand must be filled.")
+    }
+  }
+
+  phone.cancel = function() {
+    $location.path("/");
+  }
+
 
   phone.getImgUrl = function(id){
      return (id)?"/resource/img/"+id.toString(16)+".jpg":"";
@@ -173,8 +204,9 @@ angular.module('app', [ 'ngRoute' ])
                 function(response){//вызвать переход в редактирование этого телефона
                     $location.url("/phone/"+response.data.id+"/edit");
                 },
-                function(){
+                function(response){
                     alert("An error occurred when adding the phone. Try again.(Error with status: " + response.status +")")
+                    stateAdd = true;
                 });
            stateAdd = false;
         } else

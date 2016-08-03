@@ -1,21 +1,118 @@
 <div class="container">
 
-    <div class="container-fluid">
-         <row>
-                Editing phone <br>
-               <div class="text-center" >
-                   <img ng-src="{{phone.getImgUrl(phone.phone.id)}}" alt="Phone img" height="400px">
-               </div>
-               <div class="caption phone-caption">
-                   <strong>{{phone.phone.model}} </strong>
-                   Brand : {{phone.phone.brand}} <br>
-                   Screen size : {{phone.phone.screenSize}} <br>
-                   Screen resolution : {{phone.phone.screenResolution}} <br>
-                   Camera resolution : {{phone.phone.cameraResolution}} <br>
-                   <div class="price"> {{phone.phone.price}} rub.</div>
-                   Operating system : {{phone.phone.os}} <br>
-               </div>
-         </row>
-    </div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="inputModel" class="col-sm-2 control-label">Model</label>
+            <div class="col-sm-10">
+                <input type="text" ng-model="phone.phone.model" class="form-control" id="inputModel" placeholder="Write model here ...">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputBrand" class="col-sm-2 control-label">Brand</label>
+            <div class="col-sm-10">
+                <input type="text"  ng-model="phone.phone.brand" class="form-control" id="inputBrand" placeholder="Write brand here ...">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputOS" class="col-sm-2 control-label">Operating system</label>
+            <div class="col-sm-10">
+                <input type="text"  ng-model="phone.phone.os" class="form-control" id="inputOs">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputScreenResolution" class="col-sm-2 control-label">Screen resolution (px)</label>
+            <div class="col-sm-10">
+                <input type="text" ng-model="phone.phone.screenResolution" class="form-control" id="inputScreenResolution">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPrice" class="col-sm-2 control-label">Price (rub)</label>
+            <div class="col-sm-10">
+                <input type="text"  ng-model="phone.phone.price" class="form-control" id="inputPrice">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputScreenSize" class="col-sm-2 control-label">Screen size (in)</label>
+            <div class="col-sm-10">
+                <input type="text" ng-model="phone.phone.screenSize" class="form-control" id="inputScreenSize">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputCameraResolution" class="col-sm-2 control-label">Camera resolution (px)</label>
+            <div class="col-sm-10">
+                <input type="text" ng-model="phone.phone.cameraResolution" class="form-control" id="inputCameraResolution">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputCpu" class="col-sm-2 control-label">CPU model</label>
+            <div class="col-sm-10">
+                <input type="text"  ng-model="phone.phone.cpu" class="form-control" id="inputCpu">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputCoreNumber" class="col-sm-2 control-label">Core Number</label>
+            <div class="col-sm-10">
+                <input type="text" ng-model="phone.phone.coreNumber" class="form-control" id="inputCoreNumber">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputMemoryIn" class="col-sm-2 control-label">Inner storage (GB)</label>
+            <div class="col-sm-10">
+                <input type="text"  ng-model="phone.phone.memoryIn" class="form-control" id="inputMemoryIn">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputRam" class="col-sm-2 control-label">RAM (GB)</label>
+            <div class="col-sm-10">
+                <input type="text" ng-model="phone.phone.ram" class="form-control" id="inputRam">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputWeight" class="col-sm-2 control-label">Weight (g)</label>
+            <div class="col-sm-10">
+                <input type="text"  ng-model="phone.phone.weight" class="form-control" id="inputWeight">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputHeight" class="col-sm-2 control-label">Height (cm)</label>
+            <div class="col-sm-10">
+                <input type="text" ng-model="phone.phone.height" class="form-control" id="inputHeight">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputWidht" class="col-sm-2 control-label">Widht (cm)</label>
+            <div class="col-sm-10">
+                <input type="text"  ng-model="phone.phone.widht" class="form-control" id="inputWidht">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputDepth" class="col-sm-2 control-label">Depth (cm)</label>
+            <div class="col-sm-10">
+                <input type="text" ng-model="phone.phone.depth" class="form-control" id="inputDepth">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputSimType" class="col-sm-2 control-label">Type of sim-card</label>
+            <div class="col-sm-10">
+                <input type="text"  ng-model="phone.phone.simType" class="form-control" id="inputSimType">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputSimNumber" class="col-sm-2 control-label">Number of sim-cards</label>
+            <div class="col-sm-10">
+                <input type="text"  ng-model="phone.phone.simNumber" class="form-control" id="inputSimNumber">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-primary" ng-click="phone.save()"> Save </button>
+                <button class="btn btn-primary" ng-click="phone.cancel()"> Cancel </button>
+            </div>
+        </div>
+    </form>
+
+
 
 </div>
