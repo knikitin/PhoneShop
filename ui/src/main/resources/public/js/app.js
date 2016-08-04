@@ -130,11 +130,6 @@ angular.module('app', [ 'ngRoute', 'checklist-model' ])
 
       });
 
-  phonesList.getImgUrl = function(id){
-     return "/resource/img/"+id.toString(16)+".jpg";
-  };
-
-
 }])
 .controller('PhoneViewController', [ '$http', '$routeParams', function($http, $routeParams) {
   var phone = this;
@@ -149,11 +144,6 @@ angular.module('app', [ 'ngRoute', 'checklist-model' ])
         phone.phone = data;
 
       });
-
-  phone.getImgUrl = function(id){
-     return (id)?"/resource/img/"+id.toString(16)+".jpg":"";
-  };
-
 
 }])
 .controller('PhoneEditController', [ '$http', '$routeParams', '$location', function($http, $routeParams, $location) {
@@ -215,11 +205,6 @@ angular.module('app', [ 'ngRoute', 'checklist-model' ])
   phone.cancel = function() {
     $location.path("/");
   }
-
-
-  phone.getImgUrl = function(id){
-     return (id)?"/resource/img/"+id.toString(16)+".jpg":"";
-  };
 
   phone.uploadImg = function() {
     var file = phone.fileToUpload;
