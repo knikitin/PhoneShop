@@ -182,14 +182,13 @@ angular.module('app', [ 'ngRoute', 'checklist-model' ])
           $location.path("/");
       });
 
-  phone.save = function() {
+  phone.savePhone = function( afterSave ){
     if ((phone.phone.model.length>0) && (phone.phone.brand.length>0)){
        $http.put('http://localhost:8080/resource/phones/'+phone.phoneId, phone.phone).then(
             function(response){
-                $location.url("/phone/"+response.data.id+"/edit");
                 if (response.data.id>0) {
                     alert("Card of phone was saved.");
-                    $location.path("/");
+                    afterSave();
                 } else{
                     alert("Unknown error in data. (Error with status: " + response.status +")");
                 }
@@ -197,9 +196,13 @@ angular.module('app', [ 'ngRoute', 'checklist-model' ])
             function(response){
                 alert("An error occurred when saving the phone. Try again.(Error with status: " + response.status +")")
             });
-    } else
-    { alert("Error in data. Model and brand must be filled.")
+    } else {
+        alert("Error in data. Model and brand must be filled.")
     }
+  }
+
+  phone.save = function() {
+    phone.savePhone(function(){$location.path("/");});
   }
 
   phone.cancel = function() {
@@ -224,11 +227,32 @@ angular.module('app', [ 'ngRoute', 'checklist-model' ])
   };
 
   phone.deleteImg = function() {
-    var uploadUrl = '/resource/phones/'+phone.phoneId+'/img';
-    $http.delete(uploadUrl).then(
-        function(response){ alert("sucess delete image"+ response.status); },
-        function(response){ alert("fail in deleting image"+ response.status); }
+    var deleteUrl = '/resource/phones/'+phone.phoneId+'/img';
+    $http.delete(deleteUrl).then(
+        function(response){ alert("sucess delete image "+ response.status); },
+        function(response){ alert("fail in deleting image "+ response.status); }
         )
+  }
+
+  phone.deletePhone = function() {
+    var deleteUrl = '/resource/phones/'+phone.phoneId;
+    $http.delete(deleteUrl).then(
+        function(response){
+            alert("sucess delete phone "+ response.status);
+            $location.path("/");
+        },
+        function(response){ alert("fail in deleting phone "+ response.status); }
+        )
+  }
+
+  phone.saveAndView = function() {
+    phone.savePhone(function(){
+        $location.url("/phone/"+phone.phoneId);
+    });
+  }
+
+  phone.cancelAndView = function() {
+    $location.url("/phone/"+phone.phoneId);
   }
 
 }])
