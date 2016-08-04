@@ -223,6 +223,14 @@ angular.module('app', [ 'ngRoute', 'checklist-model' ])
     });
   };
 
+  phone.deleteImg = function() {
+    var uploadUrl = '/resource/phones/'+phone.phoneId+'/img';
+    $http.delete(uploadUrl).then(
+        function(response){ alert("sucess delete image"+ response.status); },
+        function(response){ alert("fail in deleting image"+ response.status); }
+        )
+  }
+
 }])
 .controller('PhoneAddController', [ '$http', '$location', function($http, $location) {
   var phone = this;

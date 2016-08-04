@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import phonesshop.domain.Phones;
 import phonesshop.domain.PhonesRepository;
+import phonesshop.service.PhonesService;
 import phonesshop.util.DebugMode;
 
 import javax.servlet.http.HttpServletResponse;
@@ -89,6 +90,7 @@ public class PhonesController {
         try {
             if (DebugMode.isDebug())
                 logger.debug("DeletePhone with id =" + id );
+            PhonesService.deleteImgPhone(ROOT, id);
             phonesRepository.delete(id);
         } catch (Exception e) {
             logger.error(" In deleteOne Phone: " + e.getMessage());
@@ -100,7 +102,7 @@ public class PhonesController {
     @ResponseBody
     public ResponseEntity<?>  handleFileUpload(@PathVariable long id,
                                    @RequestParam("file") MultipartFile file) {
-        String name =  Long.toString(id, 16)+".jpg";
+        String filename =  Long.toString(id, 16)+".jpg";
         logger.debug("Upload image for phone with id =" + id );
 
         if (!file.isEmpty()) {
@@ -108,7 +110,7 @@ public class PhonesController {
                 logger.debug("Image not empty for phone with id =" + id );
 
                 BufferedOutputStream stream = new BufferedOutputStream(
-                        new FileOutputStream(new File( ROOT +"/"+ name)));
+                        new FileOutputStream(new File( ROOT +"/"+ filename)));
                 FileCopyUtils.copy(file.getInputStream(), stream);
                 stream.close();
                 logger.debug("Image save for phone with id =" + id );
@@ -120,8 +122,14 @@ public class PhonesController {
             }
         }
         else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("You failed to upload " + name + " because the file was empty" );
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("You failed to upload " + filename + " because the file was empty" );
         }
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, path = "/{id:[\\d]+}/img")
+    @ResponseBody
+    public ResponseEntity<?>  handleFileDelete(@PathVariable long id) {
+        return PhonesService.deleteImgPhone(ROOT, id);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id:[\\d]+}/img")

@@ -8,6 +8,7 @@
                     <img ng-src="resource/phones/{{phone.phone.id}}/img" alt="Phone img" height="400px"> <br>
                     <input name="file" type="file" id="file" file-model="phone.fileToUpload" /> <br>
                     <button class="btn btn-primary" ng-click="phone.uploadImg()"> Upload image</button>
+                    <button class="btn btn-danger" ng-click="phone.deleteImg()"> Delete image</button>
                 </form>
             </div>
         </div>
