@@ -2,14 +2,21 @@ package phonesshop.web;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import phonesshop.domain.Phones;
 import phonesshop.domain.PhonesRepository;
-import phonesshop.domain.WirelessTechnology;
 import phonesshop.util.DebugMode;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.file.Paths;
 
 /**
  * Created by kostya.nikitin on 7/28/2016.
@@ -20,6 +27,15 @@ public class PhonesController {
 
 
     private static final Logger logger = Logger.getLogger("forPhonesShop");
+
+    public static final String ROOT = "static/img";
+
+    private final ResourceLoader resourceLoader;
+
+    @Autowired
+    public PhonesController(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
 
     @Autowired
     private PhonesRepository phonesRepository;
@@ -80,4 +96,46 @@ public class PhonesController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.POST, path = "/{id:[\\d]+}/img")
+    @ResponseBody
+    public ResponseEntity<?>  handleFileUpload(@PathVariable long id,
+                                   @RequestParam("file") MultipartFile file) {
+        String name =  Long.toString(id, 16)+".jpg";
+        logger.debug("Upload image for phone with id =" + id );
+
+        if (!file.isEmpty()) {
+            try {
+                logger.debug("Image not empty for phone with id =" + id );
+
+                BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(new File( ROOT +"/"+ name)));
+                FileCopyUtils.copy(file.getInputStream(), stream);
+                stream.close();
+                logger.debug("Image save for phone with id =" + id );
+                return ResponseEntity.ok().build();
+            }
+            catch (Exception e) {
+                logger.debug("Error upload for phone with id =" + id +". Error:" + e.getMessage());
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Error save for phone with id =" +  e.getMessage());
+            }
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("You failed to upload " + name + " because the file was empty" );
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/{id:[\\d]+}/img")
+    @ResponseBody
+    public ResponseEntity<?> getFile(@PathVariable long id) {
+        String filename =  Long.toString(id, 16)+".jpg";
+        try {
+            if (new File(ROOT + "/" + filename).exists()) {
+                return ResponseEntity.ok(resourceLoader.getResource("file:" + Paths.get(ROOT, filename).toString()));
+            } else {
+                return ResponseEntity.ok(resourceLoader.getResource("file:" + Paths.get(ROOT, "no-image.jpg").toString()));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

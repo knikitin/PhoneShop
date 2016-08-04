@@ -24,8 +24,8 @@
            <div ng-repeat="phone in phonesList.phones" class="col-sm-6 col-md-4">
                <div class="thumbnail">
                    <div class="text-center" >
-                       <a ng-href="#phone/{{phone.id}}" ng-show="!checkRoles(authorities,'ROLE_ADMIN')"><img ng-src="{{phonesList.getImgUrl(phone.id)}}" alt="Phone img" style="height: 200px;"> </a>
-                       <a ng-href="#phone/{{phone.id}}/edit" ng-show="checkRoles(authorities,'ROLE_ADMIN')"><img ng-src="{{phonesList.getImgUrl(phone.id)}}" alt="Phone img" style="height: 200px;"> </a>
+                       <a ng-href="#phone/{{phone.id}}" ng-show="!checkRoles(authorities,'ROLE_ADMIN')"><img ng-src="resource/phones/{{phone.id}}/img" alt="Phone img" style="height: 200px;"> </a>
+                       <a ng-href="#phone/{{phone.id}}/edit" ng-show="checkRoles(authorities,'ROLE_ADMIN')"><img ng-src="resource/phones/{{phone.id}}/img" alt="Phone img" style="height: 200px;"> </a>
                    </div>
                    <div class="caption phone-caption">
                        <a ng-href="#phone/{{phone.id}}" ng-show="!checkRoles(authorities,'ROLE_ADMIN')"><strong>{{phone.model}} </strong></a>

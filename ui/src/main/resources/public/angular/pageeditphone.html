@@ -2,112 +2,123 @@
 
     <form class="form-horizontal">
         <div class="form-group">
-            <label for="inputModel" class="col-sm-2 control-label">Model</label>
-            <div class="col-sm-10">
+            <label class="col-sm-4 control-label right-label">Image of phone</label>
+            <div class="col-sm-8">
+                <form name="uploadForm" enctype="multipart/form-data">
+                    <img ng-src="resource/phones/{{phone.phone.id}}/img" alt="Phone img" height="400px"> <br>
+                    <input name="file" type="file" id="file" file-model="phone.fileToUpload" /> <br>
+                    <button class="btn btn-primary" ng-click="phone.uploadImg()"> Upload image</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputModel" class="col-sm-4 control-label right-label">Model</label>
+            <div class="col-sm-8">
                 <input type="text" ng-model="phone.phone.model" class="form-control" id="inputModel" placeholder="Write model here ...">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputBrand" class="col-sm-2 control-label">Brand</label>
-            <div class="col-sm-10">
+            <label for="inputBrand" class="col-sm-4 control-label right-label">Brand</label>
+            <div class="col-sm-8">
                 <input type="text"  ng-model="phone.phone.brand" class="form-control" id="inputBrand" placeholder="Write brand here ...">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputOS" class="col-sm-2 control-label">Operating system</label>
-            <div class="col-sm-10">
+            <label for="inputOS" class="col-sm-4 control-label right-label">Operating system</label>
+            <div class="col-sm-8">
                 <input type="text"  ng-model="phone.phone.os" class="form-control" id="inputOs">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputScreenResolution" class="col-sm-2 control-label">Screen resolution (px)</label>
-            <div class="col-sm-10">
+            <label for="inputScreenResolution" class="col-sm-4 control-label right-label">Screen resolution (px)</label>
+            <div class="col-sm-8">
                 <input type="text" ng-model="phone.phone.screenResolution" class="form-control" id="inputScreenResolution">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputPrice" class="col-sm-2 control-label">Price (rub)</label>
-            <div class="col-sm-10">
+            <label for="inputPrice" class="col-sm-4 control-label right-label">Price (rub)</label>
+            <div class="col-sm-8">
                 <input type="text"  ng-model="phone.phone.price" class="form-control" id="inputPrice">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputScreenSize" class="col-sm-2 control-label">Screen size (in)</label>
-            <div class="col-sm-10">
+            <label for="inputScreenSize" class="col-sm-4 control-label right-label">Screen size (in)</label>
+            <div class="col-sm-8">
                 <input type="text" ng-model="phone.phone.screenSize" class="form-control" id="inputScreenSize">
             </div>
         </div>
 
         <div class="form-group">
-            <label for="inputCameraResolution" class="col-sm-2 control-label">Camera resolution (px)</label>
-            <div class="col-sm-10">
+            <label for="inputCameraResolution" class="col-sm-4 control-label right-label">Camera resolution (px)</label>
+            <div class="col-sm-8">
                 <input type="text" ng-model="phone.phone.cameraResolution" class="form-control" id="inputCameraResolution">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputCpu" class="col-sm-2 control-label">CPU model</label>
-            <div class="col-sm-10">
+            <label for="inputCpu" class="col-sm-4 control-label right-label">CPU model</label>
+            <div class="col-sm-8">
                 <input type="text"  ng-model="phone.phone.cpu" class="form-control" id="inputCpu">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputCoreNumber" class="col-sm-2 control-label">Core Number</label>
-            <div class="col-sm-10">
+            <label for="inputCoreNumber" class="col-sm-4 control-label right-label">Core Number</label>
+            <div class="col-sm-8">
                 <input type="text" ng-model="phone.phone.coreNumber" class="form-control" id="inputCoreNumber">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputMemoryIn" class="col-sm-2 control-label">Inner storage (GB)</label>
-            <div class="col-sm-10">
+            <label for="inputMemoryIn" class="col-sm-4 control-label right-label">Inner storage (GB)</label>
+            <div class="col-sm-8">
                 <input type="text"  ng-model="phone.phone.memoryIn" class="form-control" id="inputMemoryIn">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputRam" class="col-sm-2 control-label">RAM (GB)</label>
-            <div class="col-sm-10">
+            <label for="inputRam" class="col-sm-4 control-label right-label">RAM (GB)</label>
+            <div class="col-sm-8">
                 <input type="text" ng-model="phone.phone.ram" class="form-control" id="inputRam">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputWeight" class="col-sm-2 control-label">Weight (g)</label>
-            <div class="col-sm-10">
+            <label for="inputWeight" class="col-sm-4 control-label right-label">Weight (g)</label>
+            <div class="col-sm-8">
                 <input type="text"  ng-model="phone.phone.weight" class="form-control" id="inputWeight">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputHeight" class="col-sm-2 control-label">Height (cm)</label>
-            <div class="col-sm-10">
+            <label for="inputHeight" class="col-sm-4 control-label right-label">Height (cm)</label>
+            <div class="col-sm-8">
                 <input type="text" ng-model="phone.phone.height" class="form-control" id="inputHeight">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputWidht" class="col-sm-2 control-label">Widht (cm)</label>
-            <div class="col-sm-10">
+            <label for="inputWidht" class="col-sm-4 control-label right-label">Widht (cm)</label>
+            <div class="col-sm-8">
                 <input type="text"  ng-model="phone.phone.widht" class="form-control" id="inputWidht">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputDepth" class="col-sm-2 control-label">Depth (cm)</label>
-            <div class="col-sm-10">
+            <label for="inputDepth" class="col-sm-4 control-label right-label">Depth (cm)</label>
+            <div class="col-sm-8">
                 <input type="text" ng-model="phone.phone.depth" class="form-control" id="inputDepth">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputSimType" class="col-sm-2 control-label">Type of sim-card</label>
-            <div class="col-sm-10">
+            <label for="inputSimType" class="col-sm-4 control-label right-label">Type of sim-card</label>
+            <div class="col-sm-8">
                 <input type="text"  ng-model="phone.phone.simType" class="form-control" id="inputSimType">
             </div>
         </div>
         <div class="form-group">
-            <label for="inputSimNumber" class="col-sm-2 control-label">Number of sim-cards</label>
-            <div class="col-sm-10">
+            <label for="inputSimNumber" class="col-sm-4 control-label right-label">Number of sim-cards</label>
+            <div class="col-sm-8">
                 <input type="text"  ng-model="phone.phone.simNumber" class="form-control" id="inputSimNumber">
             </div>
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Directory navigation</label>
-            <div class="col-sm-10">
+            <label class="col-sm-4 control-label right-label">Directory navigation</label>
+            <div class="col-sm-8">
                 <div class="checkbox" ng-repeat="nav in phone.directoryNavigations" >
                     <label>
                         <input type="checkbox" data-checklist-model="phone.phone.directoryNavigations" data-checklist-value="nav"> {{nav.typeNavigation}}
@@ -116,8 +127,8 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">Wireless technologies</label>
-            <div class="col-sm-10">
+            <label class="col-sm-4 control-label right-label">Wireless technologies</label>
+            <div class="col-sm-8">
                 <div class="checkbox" ng-repeat="tech in phone.wirelessTechnology">
                     <label>
                         <input type="checkbox" data-checklist-model="phone.phone.wirelessTechnology" data-checklist-value="tech"> {{tech.technology}}
@@ -127,7 +138,7 @@
         </div>
 
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
+            <div class="col-sm-offset-4 col-sm-8">
                 <button class="btn btn-primary" ng-click="phone.save()"> Save </button>
                 <button class="btn btn-primary" ng-click="phone.cancel()"> Cancel </button>
             </div>

@@ -10,3 +10,7 @@
 .phone-caption{
     height: 170px;
 }
+
+label.col-sm-4.right-label {
+        text-align: right;
+}
