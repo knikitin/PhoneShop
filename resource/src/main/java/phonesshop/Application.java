@@ -1,5 +1,6 @@
 package phonesshop;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,15 +20,11 @@ public class Application extends ResourceServerConfigurerAdapter {
 
     public static void main(String[] args) {
 
-        if (args.length > 0)
-            if (args[0].equals("debug")) {
-                logger.info("Start application with Debug.");
-                DebugMode.setDebugModeOn();
-            }
+        logger.debug("Start application.");
+        DebugMode.testArgsOnLoggingLevel(args);
 
         SpringApplication.run(Application.class, args);
-        if (DebugMode.isDebug())
-            logger.debug("Made application launch.");
+        logger.debug("Made application launch.");
 
     }
 

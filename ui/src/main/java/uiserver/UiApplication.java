@@ -9,6 +9,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
@@ -27,8 +28,14 @@ import org.springframework.web.util.WebUtils;
 @EnableOAuth2Sso
 public class UiApplication extends WebSecurityConfigurerAdapter {
 
+	private static final Logger logger = Logger.getLogger("forPhonesShop");
+
 	public static void main(String[] args) {
+
+		logger.debug("Start Authserver application.");
+		DebugMode.testArgsOnLoggingLevel(args);
 		SpringApplication.run(UiApplication.class, args);
+		logger.debug("Made application launch.");
 	}
 
 	@Override

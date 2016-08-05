@@ -4,12 +4,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
-import phonesshop.domain.PhoneForList;
+import phonesshop.dto.PhoneForList;
 import phonesshop.domain.Phones;
 import phonesshop.domain.PhonesRepository;
-import phonesshop.util.DebugMode;
+import phonesshop.dto.PagePhonesListForWeb;
 
 /**
  * Created by kostya.nikitin on 6/29/2016.
@@ -26,8 +25,7 @@ public class PhonesListController {
     @RequestMapping("/phoneslist/page{cur:[\\d]+}for{countonpage:[\\d]+}")
     public PagePhonesListForWeb findAllPage(@PathVariable int cur, @PathVariable int countonpage) throws Exception {
         try {
-            if (DebugMode.isDebug())
-                logger.debug("Get page " + cur + " phones list. Count phones on page is " + countonpage);
+            logger.debug("Get page " + cur + " phones list. Count phones on page is " + countonpage);
 
             // test correct value cur and countpage
             if ((countonpage > 200)||(countonpage < 5) ) {
@@ -43,9 +41,6 @@ public class PhonesListController {
             logger.error(" In find All pages: " + e.getMessage());
             throw e;
         }
-
-
     };
-
 
 }

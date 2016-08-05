@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import phonesshop.domain.DirectoryNavigations;
 import phonesshop.domain.DirectoryNavigationsRepository;
-import phonesshop.util.DebugMode;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -22,15 +21,13 @@ public class DirectoryNavigationsController {
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.GET)
     public DirectoryNavigations getOneNavigation(@PathVariable long id, HttpServletResponse response) throws Exception {
         try {
-            if (DebugMode.isDebug())
-                logger.debug("Request to get DirectoryNavigations with id =" + id );
+            logger.debug("Request to get DirectoryNavigations with id =" + id );
             DirectoryNavigations oneDN = repository.findOne(id);
             if( null == oneDN ){
                 response.setStatus( HttpStatus.NO_CONTENT.value());
                 logger.warn("Request to get DirectoryNavigations with id =" + id + " is not completed. DirectoryNavigations is not found");
             }
             else
-            if (DebugMode.isDebug())
                 logger.debug("DirectoryNavigations with id =" + id + " was found and was returned");
             return oneDN;
         } catch (Exception e) {
@@ -42,8 +39,7 @@ public class DirectoryNavigationsController {
     @RequestMapping(method= RequestMethod.POST)
     public DirectoryNavigations addOneNavigation(@RequestBody DirectoryNavigations navigation) throws Exception {
         try {
-            if (DebugMode.isDebug())
-                logger.debug("Add new Navigations with name =" + navigation.getTypeNavigation() );
+            logger.debug("Add new Navigations with name =" + navigation.getTypeNavigation() );
             DirectoryNavigations oneDN = new DirectoryNavigations(navigation.getTypeNavigation());
             return repository.saveAndFlush(oneDN);
         } catch (Exception e) {
@@ -55,8 +51,7 @@ public class DirectoryNavigationsController {
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.PUT)
     public DirectoryNavigations updateOneNavigation(@PathVariable long id, @RequestBody DirectoryNavigations navigation) throws Exception {
         try {
-            if (DebugMode.isDebug())
-                logger.debug("Update Navigations with id =" + id );
+            logger.debug("Update Navigations with id =" + id );
             DirectoryNavigations oneDN = repository.findOne(id);
             if (oneDN != null) {
                 oneDN.setTypeNavigation(navigation.getTypeNavigation());
@@ -72,8 +67,7 @@ public class DirectoryNavigationsController {
     @RequestMapping( method= RequestMethod.GET)
     public List<DirectoryNavigations> findAllDirectoryNavigations() throws Exception {
         try {
-            if (DebugMode.isDebug())
-                logger.debug("Get Directory Navigations list.");
+            logger.debug("Get Directory Navigations list.");
             return repository.findAll() ;
         } catch (Exception e) {
             logger.error(" In find Directory Navigations: " + e.getMessage());
@@ -84,8 +78,7 @@ public class DirectoryNavigationsController {
     @RequestMapping(value = "/{id:[\\d]+}", method = RequestMethod.DELETE)
     public void deleteOneNavigation(@PathVariable long id) {
         try {
-            if (DebugMode.isDebug())
-                logger.debug("Delete Directory Navigations with id =" + id );
+            logger.debug("Delete Directory Navigations with id =" + id );
             repository.delete(id);
         } catch (Exception e) {
             logger.error(" In deleteOne Directory Navigations: " + e.getMessage());

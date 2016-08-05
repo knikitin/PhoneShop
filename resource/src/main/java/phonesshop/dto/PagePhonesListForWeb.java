@@ -1,6 +1,4 @@
-package phonesshop.web;
-
-import phonesshop.domain.PhoneForList;
+package phonesshop.dto;
 
 import java.util.List;
 
@@ -11,7 +9,7 @@ public class PagePhonesListForWeb {
     private List<PhoneForList> phonesList;
     private int pageCount;
 
-    PagePhonesListForWeb(List<PhoneForList> phonesList, int pageCount){
+    public PagePhonesListForWeb(List<PhoneForList> phonesList, int pageCount){
         this.phonesList = phonesList;
         this.pageCount = pageCount;
     }

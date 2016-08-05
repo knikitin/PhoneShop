@@ -1,4 +1,6 @@
-package phonesshop.domain;
+package phonesshop.dto;
+
+import phonesshop.domain.Phones;
 
 /**
  * Created by kostya.nikitin on 6/29/2016.

@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import phonesshop.domain.Phones;
 import phonesshop.domain.PhonesRepository;
 import phonesshop.service.PhonesService;
-import phonesshop.util.DebugMode;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
@@ -43,8 +42,7 @@ public class PhonesController {
 
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.GET)
     public Phones getOnePhone(@PathVariable long id, HttpServletResponse response) throws Exception {
-        if (DebugMode.isDebug())
-            logger.debug("Request to get phone with id =" + id );
+        logger.debug("Request to get phone with id =" + id );
 
         Phones onePhone = phonesRepository.findOne(id);
         if( null == onePhone ){
@@ -52,16 +50,14 @@ public class PhonesController {
             logger.warn("Request to get phone with id =" + id + " is not completed. Phone is not found");
         }
         else
-            if (DebugMode.isDebug())
-                logger.debug("Phone with id =" + id + " was found and was returned");
+            logger.debug("Phone with id =" + id + " was found and was returned");
         return onePhone;
     }
 
     @RequestMapping(method= RequestMethod.POST)
     public Phones addOnePhones(@RequestBody Phones phones) throws Exception {
         try {
-            if (DebugMode.isDebug())
-                logger.debug("Add new Phones with name =" + phones.getModel()+" "+phones.getBrand());
+            logger.debug("Add new Phones with name =" + phones.getModel()+" "+phones.getBrand());
             return phonesRepository.saveAndFlush(phones);
         } catch (Exception e) {
             logger.error(" In addOne Phone: " + e.getMessage());
@@ -72,8 +68,7 @@ public class PhonesController {
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.PUT)
     public Phones updateOnePhones(@PathVariable long id, @RequestBody Phones phones) throws Exception {
         try {
-            if (DebugMode.isDebug())
-                logger.debug("Update Phones with id =" + id);
+            logger.debug("Update Phones with id =" + id);
             Phones onePhone = phonesRepository.findOne(phones.getId());
             if (onePhone != null){
                 return phonesRepository.saveAndFlush(phones);
@@ -88,8 +83,7 @@ public class PhonesController {
     @RequestMapping(value = "/{id:[\\d]+}", method = RequestMethod.DELETE)
     public void deleteOnePhones(@PathVariable long id) {
         try {
-            if (DebugMode.isDebug())
-                logger.debug("DeletePhone with id =" + id );
+            logger.debug("DeletePhone with id =" + id );
             PhonesService.deleteImgPhone(ROOT, id);
             phonesRepository.delete(id);
         } catch (Exception e) {
@@ -122,6 +116,7 @@ public class PhonesController {
             }
         }
         else {
+            logger.error("Upload empty image for phone with id =" + id);
             return ResponseEntity.status(HttpStatus.CONFLICT).body("You failed to upload " + filename + " because the file was empty" );
         }
     }
@@ -129,12 +124,14 @@ public class PhonesController {
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id:[\\d]+}/img")
     @ResponseBody
     public ResponseEntity<?>  handleFileDelete(@PathVariable long id) {
+        logger.debug("Delete image for phone with id =" + id );
         return PhonesService.deleteImgPhone(ROOT, id);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id:[\\d]+}/img")
     @ResponseBody
     public ResponseEntity<?> getFile(@PathVariable long id) {
+        logger.debug("Get image for phone with id =" + id );
         String filename =  Long.toString(id, 16)+".jpg";
         try {
             if (new File(ROOT + "/" + filename).exists()) {
@@ -143,6 +140,7 @@ public class PhonesController {
                 return ResponseEntity.ok(resourceLoader.getResource("file:" + Paths.get(ROOT, "no-image.jpg").toString()));
             }
         } catch (Exception e) {
+            logger.error("In getting image for phone with id =" + id +" was error " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }

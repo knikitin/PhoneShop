@@ -3,6 +3,7 @@ package authserver;
 import java.security.KeyPair;
 import java.security.Principal;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -49,8 +50,14 @@ public class AuthserverApplication extends WebMvcConfigurerAdapter {
 		registry.addViewController("/oauth/confirm_access").setViewName("authorize");
 	}
 
+	private static final Logger logger = Logger.getLogger("forPhonesShop");
+
 	public static void main(String[] args) {
+
+		logger.debug("Start Authserver application.");
+		DebugMode.testArgsOnLoggingLevel(args);
 		SpringApplication.run(AuthserverApplication.class, args);
+		logger.debug("Made application launch.");
 	}
 
 	@Configuration
