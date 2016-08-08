@@ -11,12 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 import phonesshop.domain.Phones;
 import phonesshop.domain.PhonesRepository;
 import phonesshop.service.PhonesService;
+import phonesshop.service.PhonesServiceImpl;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.nio.file.Paths;
 
 /**
  * Created by kostya.nikitin on 7/28/2016.
@@ -38,13 +38,13 @@ public class PhonesController {
     }
 
     @Autowired
-    private PhonesRepository phonesRepository;
+    PhonesService phonesService;
 
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.GET)
     public Phones getOnePhone(@PathVariable long id, HttpServletResponse response) throws Exception {
         logger.debug("Request to get phone with id =" + id );
 
-        Phones onePhone = phonesRepository.findOne(id);
+        Phones onePhone = phonesService.findOne(id);
         if( null == onePhone ){
             response.setStatus( HttpStatus.NO_CONTENT.value());
             logger.warn("Request to get phone with id =" + id + " is not completed. Phone is not found");
@@ -58,7 +58,7 @@ public class PhonesController {
     public Phones addOnePhones(@RequestBody Phones phones) throws Exception {
         try {
             logger.debug("Add new Phones with name =" + phones.getModel()+" "+phones.getBrand());
-            return phonesRepository.saveAndFlush(phones);
+            return phonesService.updatePhone(phones);
         } catch (Exception e) {
             logger.error(" In addOne Phone: " + e.getMessage());
             throw e;
@@ -69,9 +69,9 @@ public class PhonesController {
     public Phones updateOnePhones(@PathVariable long id, @RequestBody Phones phones) throws Exception {
         try {
             logger.debug("Update Phones with id =" + id);
-            Phones onePhone = phonesRepository.findOne(phones.getId());
+            Phones onePhone = phonesService.findOne(phones.getId());
             if (onePhone != null){
-                return phonesRepository.saveAndFlush(phones);
+                return phonesService.updatePhone(phones);
             }
             return null;
         } catch (Exception e) {
@@ -84,8 +84,7 @@ public class PhonesController {
     public void deleteOnePhones(@PathVariable long id) {
         try {
             logger.debug("DeletePhone with id =" + id );
-            PhonesService.deleteImgPhone(ROOT, id);
-            phonesRepository.delete(id);
+            phonesService.deletePhone(ROOT, id);
         } catch (Exception e) {
             logger.error(" In deleteOne Phone: " + e.getMessage());
             throw e;
@@ -96,7 +95,7 @@ public class PhonesController {
     @ResponseBody
     public ResponseEntity<?>  handleFileUpload(@PathVariable long id,
                                    @RequestParam("file") MultipartFile file) {
-        String filename =  Long.toString(id, 16)+".jpg";
+        String filename =  phonesService.getNameForFileWithPhoneImage(id);
         logger.debug("Upload image for phone with id =" + id );
 
         if (!file.isEmpty()) {
@@ -125,20 +124,21 @@ public class PhonesController {
     @ResponseBody
     public ResponseEntity<?>  handleFileDelete(@PathVariable long id) {
         logger.debug("Delete image for phone with id =" + id );
-        return PhonesService.deleteImgPhone(ROOT, id);
+        String response = phonesService.deleteImgPhone(ROOT, id);
+        switch (response){
+            case "ok": return ResponseEntity.ok().build();
+            case "notFound": return ResponseEntity.notFound().build();
+            default: return ResponseEntity.status(HttpStatus.CONFLICT).body( response );
+        }
+
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/{id:[\\d]+}/img")
     @ResponseBody
     public ResponseEntity<?> getFile(@PathVariable long id) {
         logger.debug("Get image for phone with id =" + id );
-        String filename =  Long.toString(id, 16)+".jpg";
         try {
-            if (new File(ROOT + "/" + filename).exists()) {
-                return ResponseEntity.ok(resourceLoader.getResource("file:" + Paths.get(ROOT, filename).toString()));
-            } else {
-                return ResponseEntity.ok(resourceLoader.getResource("file:" + Paths.get(ROOT, "no-image.jpg").toString()));
-            }
+            return ResponseEntity.ok(resourceLoader.getResource("file:" + phonesService.getNameFileWithPhoneImage(ROOT, id)));
         } catch (Exception e) {
             logger.error("In getting image for phone with id =" + id +" was error " + e.getMessage());
             return ResponseEntity.notFound().build();

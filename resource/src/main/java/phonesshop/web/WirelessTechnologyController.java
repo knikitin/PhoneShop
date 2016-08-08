@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import phonesshop.domain.WirelessTechnology;
 import phonesshop.domain.WirelessTechnologyRepository;
+import phonesshop.service.WirelessTechnologyService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -19,13 +20,13 @@ public class WirelessTechnologyController {
     private static final Logger logger = Logger.getLogger("forPhonesShop");
 
     @Autowired
-    private WirelessTechnologyRepository repository;
+    private WirelessTechnologyService wirelessTechnologyService;
 
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.GET)
     public WirelessTechnology getOneWireless(@PathVariable long id, HttpServletResponse response) throws Exception {
         try {
             logger.debug("Request to get Wireless Technology with id =" + id );
-            WirelessTechnology oneWT = repository.findOne(id);
+            WirelessTechnology oneWT = wirelessTechnologyService.getOneTechnology(id);
             if( null == oneWT ){
                 response.setStatus( HttpStatus.NO_CONTENT.value());
                 logger.warn("Request to get Wireless Technology with id =" + id + " is not completed. Wireless Technology is not found");
@@ -43,8 +44,7 @@ public class WirelessTechnologyController {
     public WirelessTechnology addOneWireless(@RequestBody WirelessTechnology wirelessTechnology) throws Exception {
         try {
             logger.debug("Add new Wireless Technology with name =" + wirelessTechnology.getTechnology() );
-            WirelessTechnology oneWT = new WirelessTechnology(wirelessTechnology.getTechnology());
-            return repository.saveAndFlush(oneWT);
+            return wirelessTechnologyService.addOneTechnology(wirelessTechnology);
         } catch (Exception e) {
             logger.error(" In addOne Wireless Technology: " + e.getMessage());
             throw e;
@@ -52,15 +52,13 @@ public class WirelessTechnologyController {
     }
 
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.PUT)
-    public WirelessTechnology updateOneWireless(@PathVariable long id, @RequestBody WirelessTechnology wirelessTechnology) throws Exception {
+    public WirelessTechnology updateOneWireless(@PathVariable long id, @RequestBody WirelessTechnology wirelessTechnology, HttpServletResponse response) throws Exception {
         try {
             logger.debug("Update Wireless Technology with id =" + id );
-            WirelessTechnology oneWT = repository.findOne(id);
-            if (oneWT != null) {
-                oneWT.setTechnology(wirelessTechnology.getTechnology());
-                return repository.saveAndFlush(oneWT);
-            }
-            return null;
+            WirelessTechnology oneWT = wirelessTechnologyService.updateOneTechnology(id, wirelessTechnology);
+            if ( null == oneWT )
+                response.setStatus( HttpStatus.NO_CONTENT.value());
+            return oneWT;
         } catch (Exception e) {
             logger.error(" In updateOne Wireless Technology: " + e.getMessage());
             throw e;
@@ -71,7 +69,7 @@ public class WirelessTechnologyController {
     public List<WirelessTechnology> findAllWirelessTechnology() throws Exception {
         try {
             logger.debug("Get Wireless Technology list.");
-            return repository.findAll() ;
+            return wirelessTechnologyService.findAll() ;
         } catch (Exception e) {
             logger.error(" In find Wireless Technology: " + e.getMessage());
             throw e;
@@ -82,7 +80,7 @@ public class WirelessTechnologyController {
     public void deleteOneWireless(@PathVariable long id) {
         try {
             logger.debug("Delete Wireless Technology with id =" + id );
-            repository.delete(id);
+            wirelessTechnologyService.deleteOneTechnology(id);
         } catch (Exception e) {
             logger.error(" In deleteOne Wireless Technology: " + e.getMessage());
             throw e;
