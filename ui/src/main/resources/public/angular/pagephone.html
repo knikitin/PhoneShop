@@ -1,20 +1,70 @@
 <div class="container">
-
     <div class="container-fluid">
-         <row>
-               <div class="text-center" >
-                   <img ng-src="resource/phones/{{phone.phone.id}}/img" alt="Phone img" height="400px">
-               </div>
-               <div class="caption phone-caption">
-                   <strong>{{phone.phone.model}} </strong>
-                   Brand : {{phone.phone.brand}} <br>
-                   Screen size : {{phone.phone.screenSize}} <br>
-                   Screen resolution : {{phone.phone.screenResolution}} <br>
-                   Camera resolution : {{phone.phone.cameraResolution}} <br>
-                   <div class="price"> {{phone.phone.price}} rub.</div>
-                   Operating system : {{phone.phone.os}} <br>
-               </div>
-         </row>
+        <h1> <strong>{{phone.phone.brand}} {{phone.phone.model}} </strong> </h1>
     </div>
 
+    <div class="container-fluid">
+            <div class="col-sm col-md-6">
+                <div class="text-center" >
+                    <img ng-src="resource/phones/{{phone.phone.id}}/img" alt="Phone img" height="400px">
+                </div>
+            </div>
+            <div class="col-sm col-md-6">
+                Screen size (in): {{phone.phone.screenSize}} <br>
+                Screen resolution (px): {{phone.phone.screenResolution}} <br>
+                Camera resolution (Mpx): {{phone.phone.cameraResolution}} <br>
+                Operating system : {{phone.phone.os}} <br>
+                CPU model : {{phone.phone.cpu}} <br>
+                Core Number : {{phone.phone.coreNumber}} <br>
+                Inner storage (MB) : {{phone.phone.memoryIn}} <br>
+                RAM (MB) : {{phone.phone.ram}} <br>
+                Operating system : {{phone.phone.os}} <br>
+                Weight (g) : {{phone.phone.weight}}  <br>
+
+                <div class="price"> {{phone.phone.price}} rub.</div>
+            </div>
+    </div>
+    <div class="container-fluid">
+        <ul class="nav nav-tabs">
+            <li ng-class="{active: phone.tabIsActive('tech')}">
+                <a href ng-click="phone.setActiveTab('tech')">Technical characteristics</a>
+            </li>
+        </ul>
+        <div ng-show="phone.tabIsActive('tech')">
+            <div class="col-sm col-md-6">
+                <strong>Display</strong> <br>
+                Screen size (in): {{phone.phone.screenSize}} <br>
+                Screen resolution (px): {{phone.phone.screenResolution}} <br>
+                <br>
+                <strong>Photo</strong> <br>
+                Camera resolution (Mpx): {{phone.phone.cameraResolution}} <br>
+                <br>
+                <strong>CPU</strong> <br>
+                CPU model : {{phone.phone.cpu}} <br>
+                Core Number : {{phone.phone.coreNumber}} <br>
+                <br>
+                <strong>Memory </strong> <br>
+                Inner storage (MB) : {{phone.phone.memoryIn}} <br>
+                RAM (MB) : {{phone.phone.ram}} <br>
+                <br>
+                <strong>SIM-card</strong> <br>
+                Type of sim-card : {{phone.phone.simType}} <br>
+                Number of sim-cards : {{phone.phone.simNumber}} <br>
+            </div>
+            <div class="col-sm col-md-6">
+                <strong>Shell</strong> <br>
+                Height (cm) : {{phone.phone.height}}  <br>
+                Widht (cm) : {{phone.phone.widht}}  <br>
+                Depth (cm) : {{phone.phone.depth}}  <br>
+                Weight (g) : {{phone.phone.weight}}  <br>
+                <br>
+                <strong>System</strong> <br>
+                Operating system : {{phone.phone.os}} <br>
+                Navigation : {{phone.getNavigation()}} <br>
+                <br>
+                <strong>Communication</strong> <br>
+                <em ng-repeat="tech in phone.phone.wirelessTechnology"> {{tech.technology}} <br> </em>
+            </div>
+        </div>
+    </div>
 </div>

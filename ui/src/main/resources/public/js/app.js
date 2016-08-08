@@ -145,6 +145,23 @@ angular.module('app', [ 'ngRoute', 'checklist-model' ])
 
       });
 
+  phone.activeTab = "tech";
+  phone.tabIsActive = function(tab){
+    return (tab == phone.activeTab);
+  }
+  phone.setActiveTab = function(tab){
+    phone.activeTab = tab;
+  }
+  phone.getNavigation = function() {
+    listNavigaton = "";
+    if (phone.phone.directoryNavigations){
+        for(nav in phone.phone.directoryNavigations){
+            listNavigaton += (listNavigaton!="")?", ":"";
+            listNavigaton += phone.phone.directoryNavigations[nav].typeNavigation;
+        }
+    }
+    return listNavigaton;
+  }
 }])
 .controller('PhoneEditController', [ '$http', '$routeParams', '$location', function($http, $routeParams, $location) {
   var phone = this;
