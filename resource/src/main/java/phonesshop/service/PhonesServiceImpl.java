@@ -110,6 +110,16 @@ public class PhonesServiceImpl implements PhonesService{
         return phonesRepository.saveAndFlush(phone);
     }
 
+    @Override
+    public Phones updateExistingPhone(Phones phone){
+        Phones onePhone = findOne(phone.getId());
+        if (onePhone != null){
+            return updatePhone(phone);
+        }
+        return null;
+    };
+
+    @Override
     public PagePhonesListForWeb findAllPage(int cur, int countonpage) throws Exception{
         // test correct value cur and countpage
         if ((countonpage > 200)||(countonpage < 5) ) {

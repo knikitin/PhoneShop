@@ -17,5 +17,6 @@ public interface PhonesService {
     String getNameFileWithPhoneImage(long id);
     Phones findOne(long id);
     Phones updatePhone(Phones phone);
+    Phones updateExistingPhone(Phones phone);
     PagePhonesListForWeb findAllPage(int cur, int countonpage) throws Exception;
 }

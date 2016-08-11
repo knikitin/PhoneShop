@@ -58,14 +58,17 @@ public class PhonesController {
     }
 
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.PUT)
-    public Phones updateOnePhones(@PathVariable long id, @RequestBody Phones phones) throws Exception {
+    public Phones updateOnePhones(@PathVariable long id, @RequestBody Phones phones, HttpServletResponse response) throws Exception {
         try {
-            logger.debug("Update Phones with id =" + id);
-            Phones onePhone = phonesService.findOne(phones.getId());
-            if (onePhone != null){
-                return phonesService.updatePhone(phones);
+            logger.debug("updateOnePhones. Update Phones with id =" + id);
+            Phones onePhone = phonesService.updateExistingPhone(phones);
+            if (onePhone != null) {
+                response.setStatus( HttpStatus.OK.value());
+                return onePhone;
+            } else {
+                response.setStatus( HttpStatus.CONFLICT.value());
+                return null;
             }
-            return null;
         } catch (Exception e) {
             logger.error(" In updateOne Phone: " + e.getMessage());
             throw e;
