@@ -2,6 +2,7 @@ package phonesshop.service;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,8 @@ public class PhonesServiceImpl implements PhonesService{
         return Long.toString(id, 16)+".jpg";
     }
 
-    public static final String ROOT = "static/img";
+    @Value("${resource.img.root}")
+    public String ROOT;
 
     @Override
     public String deleteImgPhone(long id){
