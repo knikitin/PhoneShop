@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import phonesshop.domain.DirectoryNavigations;
-import phonesshop.service.DirectoryNavigationService;
+import phonesshop.service.DirectoryNavigationsService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
@@ -16,13 +16,13 @@ public class DirectoryNavigationsController {
     private static final Logger logger = Logger.getLogger("forPhonesShop");
 
     @Autowired
-    private DirectoryNavigationService directoryNavigationService;
+    private DirectoryNavigationsService directoryNavigationsService;
 
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.GET)
     public DirectoryNavigations getOneNavigation(@PathVariable long id, HttpServletResponse response) throws Exception {
         try {
             logger.debug("Request to get DirectoryNavigations with id =" + id );
-            DirectoryNavigations oneDN = directoryNavigationService.getOneNavigation(id);
+            DirectoryNavigations oneDN = directoryNavigationsService.getOneNavigation(id);
             if( null == oneDN ){
                 response.setStatus( HttpStatus.NO_CONTENT.value());
                 logger.warn("Request to get DirectoryNavigations with id =" + id + " is not completed. DirectoryNavigations is not found");
@@ -40,7 +40,7 @@ public class DirectoryNavigationsController {
     public DirectoryNavigations addOneNavigation(@RequestBody DirectoryNavigations oneNavigation) throws Exception {
         try {
             logger.debug("Add new Navigations with name =" + oneNavigation.getTypeNavigation() );
-            return directoryNavigationService.addOneNavigation(oneNavigation);
+            return directoryNavigationsService.addOneNavigation(oneNavigation);
         } catch (Exception e) {
             logger.error(" In addOne Directory Navigations: " + e.getMessage());
             throw e;
@@ -51,7 +51,7 @@ public class DirectoryNavigationsController {
     public DirectoryNavigations updateOneNavigation(@PathVariable long id, @RequestBody DirectoryNavigations navigation, HttpServletResponse response) throws Exception {
         try {
             logger.debug("Update Navigations with id =" + id );
-            DirectoryNavigations oneDN = directoryNavigationService.updateOneNavigation(id, navigation);
+            DirectoryNavigations oneDN = directoryNavigationsService.updateOneNavigation(id, navigation);
             if ( null == oneDN )
                 response.setStatus( HttpStatus.NO_CONTENT.value());
             return oneDN;
@@ -65,7 +65,7 @@ public class DirectoryNavigationsController {
     public List<DirectoryNavigations> findAllDirectoryNavigations() throws Exception {
         try {
             logger.debug("Get Directory Navigations list.");
-            return directoryNavigationService.findAll() ;
+            return directoryNavigationsService.findAll() ;
         } catch (Exception e) {
             logger.error(" In find Directory Navigations: " + e.getMessage());
             throw e;
@@ -76,7 +76,7 @@ public class DirectoryNavigationsController {
     public void deleteOneNavigation(@PathVariable long id) {
         try {
             logger.debug("Delete Directory Navigations with id =" + id );
-            directoryNavigationService.deleteOneNavigation(id);
+            directoryNavigationsService.deleteOneNavigation(id);
         } catch (Exception e) {
             logger.error(" In deleteOne Directory Navigations: " + e.getMessage());
             throw e;

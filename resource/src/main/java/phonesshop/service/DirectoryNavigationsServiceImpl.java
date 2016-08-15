@@ -11,7 +11,7 @@ import java.util.List;
  * Created by kostya.nikitin on 8/8/2016.
  */
 @Service
-public class DirectoryNavigationServiceImpl implements DirectoryNavigationService{
+public class DirectoryNavigationsServiceImpl implements DirectoryNavigationsService {
 
     @Autowired
     DirectoryNavigationsRepository repository;

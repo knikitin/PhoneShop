@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by kostya.nikitin on 8/8/2016.
  */
-public interface DirectoryNavigationService {
+public interface DirectoryNavigationsService {
     DirectoryNavigations getOneNavigation(long id);
     DirectoryNavigations addOneNavigation(DirectoryNavigations oneNavigation);
     DirectoryNavigations updateOneNavigation( long id, DirectoryNavigations oneNavigation);
