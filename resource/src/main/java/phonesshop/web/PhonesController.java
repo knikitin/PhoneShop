@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import phonesshop.domain.Phones;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping(value="/phones")
+@EnableGlobalMethodSecurity( securedEnabled = true)
 public class PhonesController {
 
 
@@ -46,6 +49,7 @@ public class PhonesController {
         return onePhone;
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(method= RequestMethod.POST)
     public Phones addOnePhones(@RequestBody Phones phones) throws Exception {
         try {
@@ -57,6 +61,7 @@ public class PhonesController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.PUT)
     public Phones updateOnePhones(@PathVariable long id, @RequestBody Phones phones, HttpServletResponse response) throws Exception {
         try {
@@ -75,6 +80,7 @@ public class PhonesController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/{id:[\\d]+}", method = RequestMethod.DELETE)
     public void deleteOnePhones(@PathVariable long id) {
         try {
@@ -86,6 +92,7 @@ public class PhonesController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(method = RequestMethod.POST, path = "/{id:[\\d]+}/img")
     @ResponseBody
     public ResponseEntity<?>  handleFileUpload(@PathVariable long id,
@@ -105,6 +112,7 @@ public class PhonesController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(method = RequestMethod.DELETE, path = "/{id:[\\d]+}/img")
     @ResponseBody
     public ResponseEntity<?>  handleFileDelete(@PathVariable long id) {

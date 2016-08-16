@@ -3,9 +3,10 @@ package phonesshop.web;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import phonesshop.domain.WirelessTechnology;
-import phonesshop.domain.WirelessTechnologyRepository;
 import phonesshop.service.WirelessTechnologyService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/wirelesstechnology")
+@EnableGlobalMethodSecurity( securedEnabled = true)
 public class WirelessTechnologyController {
     private static final Logger logger = Logger.getLogger("forPhonesShop");
 
@@ -40,6 +42,7 @@ public class WirelessTechnologyController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(method= RequestMethod.POST)
     public WirelessTechnology addOneWireless(@RequestBody WirelessTechnology wirelessTechnology) throws Exception {
         try {
@@ -51,6 +54,7 @@ public class WirelessTechnologyController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.PUT)
     public WirelessTechnology updateOneWireless(@PathVariable long id, @RequestBody WirelessTechnology wirelessTechnology, HttpServletResponse response) throws Exception {
         try {
@@ -76,6 +80,7 @@ public class WirelessTechnologyController {
         }
     };
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/{id:[\\d]+}", method = RequestMethod.DELETE)
     public void deleteOneWireless(@PathVariable long id) {
         try {

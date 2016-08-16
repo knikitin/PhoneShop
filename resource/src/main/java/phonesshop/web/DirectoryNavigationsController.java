@@ -3,6 +3,8 @@ package phonesshop.web;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 import phonesshop.domain.DirectoryNavigations;
 import phonesshop.service.DirectoryNavigationsService;
@@ -12,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/directorynavigations")
+@EnableGlobalMethodSecurity( securedEnabled = true)
 public class DirectoryNavigationsController {
     private static final Logger logger = Logger.getLogger("forPhonesShop");
 
@@ -36,6 +39,7 @@ public class DirectoryNavigationsController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(method= RequestMethod.POST)
     public DirectoryNavigations addOneNavigation(@RequestBody DirectoryNavigations oneNavigation) throws Exception {
         try {
@@ -47,6 +51,7 @@ public class DirectoryNavigationsController {
         }
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.PUT)
     public DirectoryNavigations updateOneNavigation(@PathVariable long id, @RequestBody DirectoryNavigations navigation, HttpServletResponse response) throws Exception {
         try {
@@ -72,6 +77,7 @@ public class DirectoryNavigationsController {
         }
     };
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/{id:[\\d]+}", method = RequestMethod.DELETE)
     public void deleteOneNavigation(@PathVariable long id) {
         try {
