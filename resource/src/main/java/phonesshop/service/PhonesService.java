@@ -1,5 +1,6 @@
 package phonesshop.service;
 
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 import phonesshop.domain.Phones;
 import phonesshop.dto.PagePhonesListForWeb;
@@ -19,4 +20,5 @@ public interface PhonesService {
     Phones updatePhone(Phones phone);
     Phones updateExistingPhone(Phones phone);
     PagePhonesListForWeb findAllPage(int cur, int countonpage) throws Exception;
+    Resource getImagePhone(long id);
 }

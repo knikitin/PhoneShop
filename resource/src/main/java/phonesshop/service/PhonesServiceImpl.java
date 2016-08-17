@@ -3,6 +3,8 @@ package phonesshop.service;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,13 @@ public class PhonesServiceImpl implements PhonesService{
 
     @Value("${resource.img.root}")
     public String ROOT;
+
+    private final ResourceLoader resourceLoader;
+
+    @Autowired
+    public PhonesServiceImpl(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
 
     @Override
     public String deleteImgPhone(long id){
@@ -134,6 +143,11 @@ public class PhonesServiceImpl implements PhonesService{
 
         return new PagePhonesListForWeb(pageSmallPhones.getContent(), pageSmallPhones.getTotalPages());
     };
+
+    @Override
+    public Resource getImagePhone(long id){
+        return resourceLoader.getResource("file:" + getNameFileWithPhoneImage(id));
+    }
 
 
 }

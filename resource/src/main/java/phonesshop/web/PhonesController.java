@@ -25,13 +25,6 @@ public class PhonesController {
 
     private static final Logger logger = Logger.getLogger("forPhonesShop");
 
-    private final ResourceLoader resourceLoader;
-
-    @Autowired
-    public PhonesController(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
-    }
-
     @Autowired
     PhonesService phonesService;
 
@@ -108,7 +101,7 @@ public class PhonesController {
         }
         catch (Exception e) {
             logger.debug("handleFileUpload. Error upload for phone with id =" + id +". Error:" + e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error save for phone with id =" +  e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error save for phone with id =" + id);
         }
     }
 
@@ -131,7 +124,7 @@ public class PhonesController {
     public ResponseEntity<?> getFile(@PathVariable long id) {
         logger.debug("Get image for phone with id =" + id );
         try {
-            return ResponseEntity.ok(resourceLoader.getResource("file:" + phonesService.getNameFileWithPhoneImage(id)));
+            return ResponseEntity.ok(phonesService.getImagePhone(id));
         } catch (Exception e) {
             logger.error("In getting image for phone with id =" + id +" was error " + e.getMessage());
             return ResponseEntity.notFound().build();
