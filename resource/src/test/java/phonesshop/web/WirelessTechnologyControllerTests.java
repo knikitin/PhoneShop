@@ -1,4 +1,4 @@
-package phonesshop;
+package phonesshop.web;
 
 import com.jayway.jsonpath.JsonPath;
 import org.junit.Before;

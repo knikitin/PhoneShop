@@ -1,4 +1,4 @@
-package phonesshop;
+package phonesshop.web;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.test.context.support.WithMockUser;
+import phonesshop.ApplicationTests;
 import phonesshop.domain.WirelessTechnology;
 import phonesshop.service.WirelessTechnologyService;
 import phonesshop.web.WirelessTechnologyController;
@@ -20,7 +21,7 @@ import static org.mockito.BDDMockito.given;
 /**
  * Created by kostya.nikitin on 8/11/2016.
  */
-public class WirelessTechnologyControllerTestsDuplicate extends ApplicationTests  {
+public class WirelessTechnologyControllerTestsDuplicate extends ApplicationTests {
 
 
    @Autowired

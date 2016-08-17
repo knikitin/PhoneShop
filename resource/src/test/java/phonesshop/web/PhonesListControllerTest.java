@@ -1,4 +1,4 @@
-package phonesshop;
+package phonesshop.web;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import phonesshop.ApplicationTests;
 import phonesshop.domain.Phones;
 import phonesshop.dto.PagePhonesListForWeb;
 import phonesshop.dto.PhoneForList;
@@ -35,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class PhonesListControllerTest extends ApplicationTests  {
+public class PhonesListControllerTest extends ApplicationTests {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
