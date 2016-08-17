@@ -131,10 +131,10 @@ public class PhonesServiceImpl implements PhonesService{
     };
 
     @Override
-    public PagePhonesListForWeb findAllPage(int cur, int countonpage) throws Exception{
+    public PagePhonesListForWeb findAllPage(int cur, int countonpage) throws IllegalArgumentException {
         // test correct value cur and countpage
         if ((countonpage > 200)||(countonpage < 5) ) {
-            throw new Exception("Error number of phones on the page. The number must be in the range of 5 ... 200");
+            throw new IllegalArgumentException("Error number of phones on the page. The number must be in the range of 5 ... 200");
         }
 
         Page<Phones> pagePhones = phonesRepository.findAll(new PageRequest(cur-1, countonpage));

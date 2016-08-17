@@ -19,6 +19,6 @@ public interface PhonesService {
     Phones findOne(long id);
     Phones updatePhone(Phones phone);
     Phones updateExistingPhone(Phones phone);
-    PagePhonesListForWeb findAllPage(int cur, int countonpage) throws Exception;
+    PagePhonesListForWeb findAllPage(int cur, int countonpage) throws IllegalArgumentException;
     Resource getImagePhone(long id);
 }

@@ -2,12 +2,9 @@ package phonesshop.web;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.*;
-import phonesshop.dto.PhoneForList;
-import phonesshop.domain.Phones;
-import phonesshop.domain.PhonesRepository;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import phonesshop.dto.PagePhonesListForWeb;
 import phonesshop.service.PhonesService;
 
@@ -28,7 +25,7 @@ public class PhonesListController {
         try {
             logger.debug("Get page " + cur + " phones list. Count phones on page is " + countonpage);
             return phonesService.findAllPage(cur, countonpage);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException e) {
             logger.error(" In find All pages: " + e.getMessage());
             throw e;
         }
