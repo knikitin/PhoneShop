@@ -15,12 +15,10 @@ import phonesshop.domain.Phones;
 import phonesshop.domain.PhonesRepository;
 import phonesshop.dto.PagePhonesListForWeb;
 import phonesshop.dto.PhoneForList;
+import phonesshop.util.FilesOperationsService;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
 
 /**
  * Created by kostya.nikitin on 8/4/2016.
@@ -32,19 +30,22 @@ public class PhonesServiceImpl implements PhonesService{
     @Autowired
     private PhonesRepository phonesRepository;
 
-    @Override
-    public String getNameForFileWithPhoneImage(long id){
-        return Long.toString(id, 16)+".jpg";
-    }
-
     @Value("${resource.img.root}")
     public String ROOT;
 
     private final ResourceLoader resourceLoader;
 
     @Autowired
+    private FilesOperationsService filesOperationsService;
+
+    @Autowired
     public PhonesServiceImpl(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
+    }
+
+    @Override
+    public String getNameForFileWithPhoneImage(long id){
+        return Long.toString(id, 16)+".jpg";
     }
 
     @Override
@@ -53,8 +54,8 @@ public class PhonesServiceImpl implements PhonesService{
         logger.debug("Delete image for phone with id =" + id );
         try {
             File f1 = new File(ROOT + "/" + filename);
-            if (f1.exists()) {
-                if (f1.delete())
+            if (filesOperationsService.exists(f1)) {
+                if (filesOperationsService.delete(f1))
                     return "ok";
                 else
                     return "You failed to delete " + filename;
@@ -75,10 +76,7 @@ public class PhonesServiceImpl implements PhonesService{
             try {
                 logger.debug("Image not empty for phone with id =" + id );
 
-                BufferedOutputStream stream = new BufferedOutputStream(
-                        new FileOutputStream(new File( ROOT +"/"+ filename)));
-                FileCopyUtils.copy(file.getInputStream(), stream);
-                stream.close();
+                filesOperationsService.copy(file, ROOT +"/"+ filename);
                 logger.debug("Image save for phone with id =" + id );
                 return true;
             }
@@ -97,17 +95,17 @@ public class PhonesServiceImpl implements PhonesService{
     @Override
     @Transactional
     public void deletePhone(long id){
+        logger.debug("Delete image for phone with id =" + id );
         deleteImgPhone(id);
         phonesRepository.delete(id);
     }
 
-    @Override
-    public String getNameFileWithPhoneImage(long id){
+    private String getNameFileWithPhoneImage(long id){
         String filename =  getNameForFileWithPhoneImage(id);
-        if (new File(ROOT + "/" + filename).exists()) {
-            return Paths.get(ROOT, filename).toString();
+        if (filesOperationsService.exists(new File(ROOT + "/" + filename))) {
+            return filesOperationsService.getToString(ROOT, filename);
         } else {
-            return Paths.get(ROOT, "no-image.jpg").toString();
+            return filesOperationsService.getToString(ROOT, "no-image.jpg");
         }
     }
 
@@ -138,7 +136,6 @@ public class PhonesServiceImpl implements PhonesService{
         }
 
         Page<Phones> pagePhones = phonesRepository.findAll(new PageRequest(cur-1, countonpage));
-
         Page<PhoneForList> pageSmallPhones = pagePhones.map(PhoneForList::new);
 
         return new PagePhonesListForWeb(pageSmallPhones.getContent(), pageSmallPhones.getTotalPages());

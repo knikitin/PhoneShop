@@ -15,7 +15,6 @@ public interface PhonesService {
     String deleteImgPhone(long id);
     boolean uploadImgPhone(MultipartFile file, long id) throws IOException;
     void deletePhone(long id);
-    String getNameFileWithPhoneImage(long id);
     Phones findOne(long id);
     Phones updatePhone(Phones phone);
     Phones updateExistingPhone(Phones phone);
