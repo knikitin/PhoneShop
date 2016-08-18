@@ -1,6 +1,5 @@
 package phonesshop.web;
 
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +40,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class DirectoryNavigationsControllerTest {
-    private static final Logger logger = Logger.getLogger("forPhonesShop");
 
     private MockMvc mvc;
 
@@ -55,12 +53,13 @@ public class DirectoryNavigationsControllerTest {
     private OAuthHelper helper;
 
     @Before
-    public void before() {
-        mvc = MockMvcBuilders.webAppContextSetup(webapp)
+    public void setup() {
+        mvc = MockMvcBuilders
+                .webAppContextSetup(webapp)
                 .apply(springSecurity())
-                .alwaysDo(print())
                 .build();
     }
+
 
     private DirectoryNavigations getNewDirectoryNavigations(long id, String caption){
         DirectoryNavigations navigations = new DirectoryNavigations(caption);

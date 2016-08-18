@@ -1,233 +1,71 @@
 package phonesshop.web;
 
-import com.jayway.jsonpath.JsonPath;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import phonesshop.config.OAuthHelper;
+import phonesshop.ApplicationTests;
 import phonesshop.domain.WirelessTechnology;
 import phonesshop.service.WirelessTechnologyService;
+import phonesshop.web.WirelessTechnologyController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Arrays;
 
-import static net.minidev.json.JSONValue.toJSONString;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * Created by kostya.nikitin on 8/12/2016.
- */
+ * Created by kostya.nikitin on 8/11/2016.
+ * Duplicated test. Run without mvc perform
+*/
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class WirelessTechnologyControllerTests {
+public class WirelessTechnologyControllerTests extends ApplicationTests {
 
-    private MockMvc mvc;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+   @Autowired
+    private WirelessTechnologyController wirelessTechnologyController;
 
     @MockBean
     private WirelessTechnologyService wirelessTechnologyServiceMock;
 
-    @Autowired
-    private OAuthHelper helper;
+    @Test
+    public void findAll_GoodFindAll_ReturnAllEntity() throws Exception {
+        WirelessTechnology wireless1 = new WirelessTechnology("test");
+        wireless1.setId(1111L);
+        WirelessTechnology wireless2 = new WirelessTechnology("test");
+        wireless2.setId(1112L);
 
-    private WirelessTechnology getNewWirelessTechnology(long id, String caption){
-        WirelessTechnology wireless = new WirelessTechnology(caption);
-        wireless.setId(id);
-        return wireless;
-    }
+        given(this.wirelessTechnologyServiceMock.
+                findAll()
+        ).willReturn(Arrays.asList(wireless1, wireless2));
 
-    @Before
-    public void setup() {
-        mvc = MockMvcBuilders
-                .webAppContextSetup(webApplicationContext)
-                .apply(springSecurity())
-                .build();
+        List<WirelessTechnology> result = wirelessTechnologyController.findAllWirelessTechnology();
+
+        Assert.assertNotNull(result);
+        Assert.assertEquals(2, result.size());
     }
 
     @Test
-    public void findAllWirelessTechnology_GoodFindAll_ReturnAllEntity() throws Exception {
-
-        given(this.wirelessTechnologyServiceMock. findAll()
-        ).willReturn(Arrays.asList(getNewWirelessTechnology(1111L, "test"), getNewWirelessTechnology(1112L, "test")));
-
-        this.mvc.perform(get("/wirelesstechnology"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", is(1111)))
-                .andExpect(jsonPath("$[0].technology", is("test")))
-                .andExpect(jsonPath("$[1].id", is(1112)))
-                .andExpect(jsonPath("$[1].technology", is("test")))
-                ;
-        verify(wirelessTechnologyServiceMock, times(1)).findAll();
-        verifyNoMoreInteractions(wirelessTechnologyServiceMock);
-    }
-
-    @Test
-    public void getOneWireless_ErrorUnautorized_ReturnUnauthorizedStatus() throws Exception {
-
-        this.mvc.perform(get("/wirelesstechnology/1111"))
-                .andExpect(status().isUnauthorized())
-        ;
-    }
-
-    @Test
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     public void getOneWireless_GoodFindOne_ReturnEntity() throws Exception {
+        WirelessTechnology wireless1 = new WirelessTechnology("test");
+        wireless1.setId(1111L);
 
         given(this.wirelessTechnologyServiceMock.getOneTechnology(1111)
-        ).willReturn(getNewWirelessTechnology(1111L, "test"));
+        ).willReturn(wireless1);
 
-        RequestPostProcessor bearerToken = helper.bearerToken("myclientwith");
+        HttpServletResponse response = new MockHttpServletResponse();
+        WirelessTechnology result = wirelessTechnologyController.getOneWireless(1111L, response) ;
 
-        mvc.perform(MockMvcRequestBuilders.get("/wirelesstechnology/1111")
-                .with(bearerToken))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.id", is(1111)))
-                .andExpect(jsonPath("$.technology", is("test")))
-        ;
-        verify(wirelessTechnologyServiceMock, times(1)).getOneTechnology(1111);
-        verifyNoMoreInteractions(wirelessTechnologyServiceMock);
+        Assert.assertNotNull(result);
     }
-
-    @Test
-    public void getOneWireless_ErrorNoEntityWithID_ReturnNoContent() throws Exception {
-
-        given(this.wirelessTechnologyServiceMock.getOneTechnology(1111)
-        ).willReturn(null);
-
-        RequestPostProcessor bearerToken = helper.bearerToken("myclientwith");
-
-        mvc.perform(MockMvcRequestBuilders.get("/wirelesstechnology/1111")
-                .with(bearerToken))
-                .andExpect(status().isNoContent())
-        ;
-        verify(wirelessTechnologyServiceMock, times(1)).getOneTechnology(1111);
-        verifyNoMoreInteractions(wirelessTechnologyServiceMock);
-    }
-
-
-    @Test
-    public void addOneWireless_ErrorUnautorized_ReturnUnauthorizedStatus() throws Exception {
-        String jsonString = toJSONString(getNewWirelessTechnology(1111L, "test"));
-
-        this.mvc.perform(post("/wirelesstechnology")
-                .contentType("application/json;charset=UTF-8")
-                .content(jsonString))
-                .andExpect(status().isUnauthorized())
-        ;
-    }
-
-    @Test
-    public void addOneWireless_GoodAddOne_ReturnEntity() throws Exception {
-        WirelessTechnology oneTechnology = getNewWirelessTechnology(1111L, "test");
-        given(this.wirelessTechnologyServiceMock.addOneTechnology(Mockito.any(WirelessTechnology.class))
-        ).willReturn(oneTechnology);
-        RequestPostProcessor bearerToken = helper.bearerToken("myclientwith");
-        String jsonString = toJSONString(oneTechnology);
-
-        this.mvc.perform(post("/wirelesstechnology")
-                .contentType("application/json;charset=UTF-8")
-                .content(jsonString)
-                .with(bearerToken))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.id", is(1111)))
-                .andExpect(jsonPath("$.technology", is("test")))
-        ;
-        verify(wirelessTechnologyServiceMock, times(1)).addOneTechnology(Mockito.any(WirelessTechnology.class));
-        verifyNoMoreInteractions(wirelessTechnologyServiceMock);
-    }
-
-
-    @Test
-    public void updateOneWireless_ErrorNoEntityWithID_ReturnNoContent() throws Exception {
-        WirelessTechnology oneTechnology = getNewWirelessTechnology(1111L, "test");
-        given(this.wirelessTechnologyServiceMock.updateOneTechnology(Mockito.anyLong(),Mockito.any(WirelessTechnology.class))
-        ).willReturn(null);
-
-        RequestPostProcessor bearerToken = helper.bearerToken("myclientwith");
-        String jsonString = toJSONString(oneTechnology);
-
-        mvc.perform(MockMvcRequestBuilders.put("/wirelesstechnology/1111")
-                .contentType("application/json;charset=UTF-8")
-                .content(jsonString)
-                .with(bearerToken))
-                .andExpect(status().isNoContent())
-        ;
-        verify(wirelessTechnologyServiceMock, times(1)).updateOneTechnology(Mockito.anyLong(),Mockito.any(WirelessTechnology.class));
-        verifyNoMoreInteractions(wirelessTechnologyServiceMock);
-    }
-
-
-    @Test
-    public void updateOneWireless_ErrorUnautorized_ReturnUnauthorizedStatus() throws Exception {
-        String jsonString = toJSONString(getNewWirelessTechnology(1111L, "test"));
-
-        this.mvc.perform(put("/wirelesstechnology/1111")
-                .contentType("application/json;charset=UTF-8")
-                .content(jsonString))
-                .andExpect(status().isUnauthorized())
-        ;
-    }
-
-    @Test
-    public void updateOneWireless_GoodUpdateOne_ReturnEntity() throws Exception {
-        WirelessTechnology oneTechnology = getNewWirelessTechnology(1111L, "test");
-        given(this.wirelessTechnologyServiceMock.updateOneTechnology(Mockito.anyLong(), Mockito.any(WirelessTechnology.class))
-        ).willReturn(oneTechnology);
-        RequestPostProcessor bearerToken = helper.bearerToken("myclientwith");
-        String jsonString = toJSONString(oneTechnology);
-
-        this.mvc.perform(put("/wirelesstechnology/1111")
-                .contentType("application/json;charset=UTF-8")
-                .content(jsonString)
-                .with(bearerToken))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
-                .andExpect(jsonPath("$.id", is(1111)))
-                .andExpect(jsonPath("$.technology", is("test")))
-        ;
-        verify(wirelessTechnologyServiceMock, times(1)).updateOneTechnology(Mockito.anyLong(), Mockito.any(WirelessTechnology.class));
-        verifyNoMoreInteractions(wirelessTechnologyServiceMock);
-    }
-
-    @Test
-    public void deleteOneWireless_ErrorUnautorized_ReturnUnauthorizedStatus() throws Exception {
-
-        this.mvc.perform(delete("/wirelesstechnology/1111"))
-                .andExpect(status().isUnauthorized())
-        ;
-    }
-
-    @Test
-    public void deleteOneWireless_GoodDeleteOne_ReturnStatusOk() throws Exception {
-
-        RequestPostProcessor bearerToken = helper.bearerToken("myclientwith");
-        this.mvc.perform(delete("/wirelesstechnology/1111")
-                .with(bearerToken))
-                .andExpect(status().isOk())
-        ;
-        verify(wirelessTechnologyServiceMock, times(1)).deleteOneTechnology(1111);
-        verifyNoMoreInteractions(wirelessTechnologyServiceMock);
-    }
-
 
 }
