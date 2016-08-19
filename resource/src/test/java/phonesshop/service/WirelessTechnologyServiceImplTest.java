@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class WirelessTechnologyServiceTest {
+public class WirelessTechnologyServiceImplTest {
     @MockBean(name="repository")
     private WirelessTechnologyRepository repository;
 
