@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -136,6 +137,7 @@ public class WirelessTechnologyControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void addOneWireless_GoodAddOne_ReturnEntity() throws Exception {
         WirelessTechnology oneTechnology = getNewWirelessTechnology(1111L, "test");
         given(this.wirelessTechnologyServiceMock.addOneTechnology(Mockito.any(WirelessTechnology.class))
@@ -152,12 +154,11 @@ public class WirelessTechnologyControllerTest {
                 .andExpect(jsonPath("$.id", is(1111)))
                 .andExpect(jsonPath("$.technology", is("test")))
         ;
-        verify(wirelessTechnologyServiceMock, times(1)).addOneTechnology(Mockito.any(WirelessTechnology.class));
-        verifyNoMoreInteractions(wirelessTechnologyServiceMock);
     }
 
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void updateOneWireless_ErrorNoEntityWithID_ReturnNoContent() throws Exception {
         WirelessTechnology oneTechnology = getNewWirelessTechnology(1111L, "test");
         given(this.wirelessTechnologyServiceMock.updateOneTechnology(Mockito.anyLong(),Mockito.any(WirelessTechnology.class))
@@ -172,8 +173,6 @@ public class WirelessTechnologyControllerTest {
                 .with(bearerToken))
                 .andExpect(status().isNoContent())
         ;
-        verify(wirelessTechnologyServiceMock, times(1)).updateOneTechnology(Mockito.anyLong(),Mockito.any(WirelessTechnology.class));
-        verifyNoMoreInteractions(wirelessTechnologyServiceMock);
     }
 
 
@@ -189,6 +188,7 @@ public class WirelessTechnologyControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void updateOneWireless_GoodUpdateOne_ReturnEntity() throws Exception {
         WirelessTechnology oneTechnology = getNewWirelessTechnology(1111L, "test");
         given(this.wirelessTechnologyServiceMock.updateOneTechnology(Mockito.anyLong(), Mockito.any(WirelessTechnology.class))
@@ -205,8 +205,6 @@ public class WirelessTechnologyControllerTest {
                 .andExpect(jsonPath("$.id", is(1111)))
                 .andExpect(jsonPath("$.technology", is("test")))
         ;
-        verify(wirelessTechnologyServiceMock, times(1)).updateOneTechnology(Mockito.anyLong(), Mockito.any(WirelessTechnology.class));
-        verifyNoMoreInteractions(wirelessTechnologyServiceMock);
     }
 
     @Test

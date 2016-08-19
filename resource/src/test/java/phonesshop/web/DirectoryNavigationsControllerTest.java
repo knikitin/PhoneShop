@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -29,7 +30,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -142,6 +142,7 @@ public class DirectoryNavigationsControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     public void addOneNavigation_GoodAddOne_ReturnEntity() throws Exception {
         DirectoryNavigations oneNavigation = getNewDirectoryNavigations(1111L, "test");
         given(this.directoryNavigationsServiceMock.addOneNavigation(Mockito.any(DirectoryNavigations.class))
@@ -158,12 +159,11 @@ public class DirectoryNavigationsControllerTest {
                 .andExpect(jsonPath("$.id", is(1111)))
                 .andExpect(jsonPath("$.typeNavigation", is("test")))
         ;
-        verify(directoryNavigationsServiceMock, times(1)).addOneNavigation(Mockito.any(DirectoryNavigations.class));
-        verifyNoMoreInteractions(directoryNavigationsServiceMock);
     }
 
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void updateOneNavigation_ErrorNoEntityWithID_ReturnNoContent() throws Exception {
         DirectoryNavigations oneNavigation = getNewDirectoryNavigations(1111L, "test");
         given(this.directoryNavigationsServiceMock.updateOneNavigation(Mockito.anyLong(),Mockito.any(DirectoryNavigations.class))
@@ -178,8 +178,6 @@ public class DirectoryNavigationsControllerTest {
                 .with(bearerToken))
                 .andExpect(status().isNoContent())
         ;
-        verify(directoryNavigationsServiceMock, times(1)).updateOneNavigation(Mockito.anyLong(),Mockito.any(DirectoryNavigations.class));
-        verifyNoMoreInteractions(directoryNavigationsServiceMock);
     }
 
 
@@ -195,6 +193,7 @@ public class DirectoryNavigationsControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"USER","ADMIN"})
     public void updateOneNavigation_GoodUpdateOne_ReturnEntity() throws Exception {
         DirectoryNavigations oneNavigation = getNewDirectoryNavigations(1111L, "test");
         given(this.directoryNavigationsServiceMock.updateOneNavigation(Mockito.anyLong(), Mockito.any(DirectoryNavigations.class))
@@ -211,8 +210,6 @@ public class DirectoryNavigationsControllerTest {
                 .andExpect(jsonPath("$.id", is(1111)))
                 .andExpect(jsonPath("$.typeNavigation", is("test")))
         ;
-        verify(directoryNavigationsServiceMock, times(1)).updateOneNavigation(Mockito.anyLong(), Mockito.any(DirectoryNavigations.class));
-        verifyNoMoreInteractions(directoryNavigationsServiceMock);
     }
 
     @Test

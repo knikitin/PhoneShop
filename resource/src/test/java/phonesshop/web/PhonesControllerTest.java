@@ -13,6 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockMultipartHttpServletRequest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -122,6 +123,7 @@ public class PhonesControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void addOnePhones_GoodAddOne_ReturnEntity() throws Exception {
         Phones onePhone = getNewPhones(1111L, "test");
         given(this.phonesServiceMock.updatePhone(Mockito.any(Phones.class))
@@ -138,12 +140,11 @@ public class PhonesControllerTest {
                 .andExpect(jsonPath("$.id", is(1111)))
                 .andExpect(jsonPath("$.model", is("test")))
         ;
-        verify(phonesServiceMock, times(1)).updatePhone(Mockito.any(Phones.class));
-        verifyNoMoreInteractions(phonesServiceMock);
     }
 
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void updateOnePhones_ErrorNoEntityWithID_ReturnNoContent() throws Exception {
         Phones onePhone = getNewPhones(1111L, "test");
         given(this.phonesServiceMock.updateExistingPhone(Mockito.any(Phones.class))
@@ -158,8 +159,6 @@ public class PhonesControllerTest {
                 .with(bearerToken))
                 .andExpect(status().isConflict())
         ;
-        verify(phonesServiceMock, times(1)).updateExistingPhone(Mockito.any(Phones.class));
-        verifyNoMoreInteractions(phonesServiceMock);
     }
 
 
@@ -175,6 +174,7 @@ public class PhonesControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void updateOnePhones_GoodUpdateOne_ReturnEntity() throws Exception {
         Phones onePhone = getNewPhones(1111L, "test");
         given(this.phonesServiceMock.updateExistingPhone(Mockito.any(Phones.class))
@@ -191,8 +191,6 @@ public class PhonesControllerTest {
                 .andExpect(jsonPath("$.id", is(1111)))
                 .andExpect(jsonPath("$.model", is("test")))
         ;
-        verify(phonesServiceMock, times(1)).updateExistingPhone(Mockito.any(Phones.class));
-        verifyNoMoreInteractions(phonesServiceMock);
     }
 
     @Test
@@ -215,6 +213,7 @@ public class PhonesControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void handleFileUpload_GoodUploadFile_ReturnStatusOk() throws Exception {
         given(this.phonesServiceMock.uploadImgPhone(Mockito.any(MultipartFile.class), Mockito.anyLong())
         ).willReturn(true);
@@ -229,12 +228,10 @@ public class PhonesControllerTest {
                 .with(bearerToken))
                 .andExpect(status().isOk())
         ;
-
-        verify(phonesServiceMock, times(1)).uploadImgPhone(Mockito.any(MultipartFile.class), Mockito.anyLong());
-        verifyNoMoreInteractions(phonesServiceMock);
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void handleFileUpload_UploadingEmptyFile_ReturnStatusConflict() throws Exception {
         given(this.phonesServiceMock.uploadImgPhone(Mockito.any(MultipartFile.class), Mockito.anyLong())
         ).willReturn(false);
@@ -250,12 +247,10 @@ public class PhonesControllerTest {
                 .andExpect(status().isConflict())
                 .andExpect(content().string("You failed to upload image because the file was empty"))
         ;
-
-        verify(phonesServiceMock, times(1)).uploadImgPhone(Mockito.any(MultipartFile.class), Mockito.anyLong());
-        verifyNoMoreInteractions(phonesServiceMock);
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void handleFileUpload_ErrorSaveFileInService_ReturnStatusConflict() throws Exception {
         given(this.phonesServiceMock.uploadImgPhone(Mockito.any(MultipartFile.class), Mockito.anyLong())
         ).willThrow(new IOException());
@@ -271,9 +266,6 @@ public class PhonesControllerTest {
                 .andExpect(status().isConflict())
                 .andExpect(content().string("Error save for phone with id =1111"))
         ;
-
-        verify(phonesServiceMock, times(1)).uploadImgPhone(Mockito.any(MultipartFile.class), Mockito.anyLong());
-        verifyNoMoreInteractions(phonesServiceMock);
     }
 
     @Test
@@ -284,6 +276,7 @@ public class PhonesControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void handleFileDelete_GoodDeletingFile_ReturnStatusOk() throws Exception {
         given(this.phonesServiceMock.deleteImgPhone(1111)
         ).willReturn("ok");
@@ -294,12 +287,11 @@ public class PhonesControllerTest {
                 .with(bearerToken))
                 .andExpect(status().isOk())
         ;
-        verify(phonesServiceMock, times(1)).deleteImgPhone(1111);
-        verifyNoMoreInteractions(phonesServiceMock);
     }
 
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void handleFileDelete_FileForPhoneNotFound_ReturnStatusNotFound() throws Exception {
         given(this.phonesServiceMock.deleteImgPhone(1111)
         ).willReturn("notFound");
@@ -310,11 +302,10 @@ public class PhonesControllerTest {
                 .with(bearerToken))
                 .andExpect(status().isNotFound())
         ;
-        verify(phonesServiceMock, times(1)).deleteImgPhone(1111);
-        verifyNoMoreInteractions(phonesServiceMock);
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void handleFileDelete_AbnormalBehaviorPhonesServices_ReturnStatusConflict() throws Exception {
         given(this.phonesServiceMock.deleteImgPhone(1111)
         ).willReturn("something else");
@@ -326,8 +317,6 @@ public class PhonesControllerTest {
                 .andExpect(status().isConflict())
                 .andExpect(content().string("something else"))
         ;
-        verify(phonesServiceMock, times(1)).deleteImgPhone(1111);
-        verifyNoMoreInteractions(phonesServiceMock);
     }
 
     @Test

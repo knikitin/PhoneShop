@@ -4,17 +4,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import phonesshop.domain.DirectoryNavigations;
 import phonesshop.domain.DirectoryNavigationsRepository;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 /**
@@ -30,6 +26,7 @@ public class DirectoryNavigationsServiceImplTest {
     private DirectoryNavigationsService directoryNavigationsService;
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void updateOneNavigation_GoodUpdate_ReturnEntity(){
         DirectoryNavigations oneDN = new DirectoryNavigations("test");
         oneDN.setId(1111L);
@@ -46,6 +43,7 @@ public class DirectoryNavigationsServiceImplTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void updateOneNavigation_EntityNotFound_ReturnNull(){
         DirectoryNavigations oneDN = new DirectoryNavigations("test");
         oneDN.setId(1111L);

@@ -1,22 +1,18 @@
 package phonesshop.service;
 
-import com.tngtech.java.junit.dataprovider.DataProvider;
-import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import org.apache.log4j.Logger;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 import phonesshop.domain.Phones;
@@ -38,7 +34,6 @@ import static org.mockito.Mockito.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PhonesServiceImplTest {
-    private static final Logger logger = Logger.getLogger("forPhonesShop");
 
     @Autowired
     private PhonesService phonesService;
@@ -57,6 +52,7 @@ public class PhonesServiceImplTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void deleteImgPhone_GoodDelete_ReturnStringOk() throws Exception {
         long phoneId = 1111L;
 
@@ -74,6 +70,7 @@ public class PhonesServiceImplTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void deleteImgPhone_TestMethodGetNameForFileWithPhoneImage_ReturnStringOk() throws Exception {
         long phoneId = 1111L;
 
@@ -97,6 +94,7 @@ public class PhonesServiceImplTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void deleteImgPhone_FailedInvokeDeleteFile_ReturnStringWithMessage() throws Exception {
         long phoneId = 1111L;
 
@@ -115,6 +113,7 @@ public class PhonesServiceImplTest {
 
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void deleteImgPhone_FileNotFound_ReturnStringNotFound() throws Exception {
         long phoneId = 1111L;
 
@@ -130,6 +129,7 @@ public class PhonesServiceImplTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void uploadImgPhone_GoodUpload_ReturnTrue() throws Exception {
         long phoneId = 1111L;
         MultipartFile mock = mock(MultipartFile.class);
@@ -143,6 +143,7 @@ public class PhonesServiceImplTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void uploadImgPhone_UploadEmptyFile_ReturnFalse() throws Exception {
         long phoneId = 1111L;
         MultipartFile mock = mock(MultipartFile.class);
@@ -202,12 +203,4 @@ public class PhonesServiceImplTest {
                     .hasMessage("Error number of phones on the page. The number must be in the range of 5 ... 200");
         }
     }
-
-/*
-
-
-
-*/
-
-
 }

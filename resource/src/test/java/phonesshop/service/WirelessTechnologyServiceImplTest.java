@@ -6,14 +6,12 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
-import phonesshop.domain.DirectoryNavigations;
-import phonesshop.domain.DirectoryNavigationsRepository;
 import phonesshop.domain.WirelessTechnology;
 import phonesshop.domain.WirelessTechnologyRepository;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
  * Created by kostya.nikitin on 8/18/2016.
@@ -28,6 +26,7 @@ public class WirelessTechnologyServiceImplTest {
     private WirelessTechnologyService wirelessTechnologyService;
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void updateOneTechnology_GoodUpdate_ReturnEntity(){
         WirelessTechnology oneWT = new WirelessTechnology("test");
         oneWT.setId(1111L);
@@ -44,6 +43,7 @@ public class WirelessTechnologyServiceImplTest {
     }
 
     @Test
+    @WithMockUser(username="admin",roles={"ADMIN"})
     public void updateOneTechnology_EntityNotFound_ReturnNull(){
         WirelessTechnology oneWT = new WirelessTechnology("test");
         oneWT.setId(1111L);

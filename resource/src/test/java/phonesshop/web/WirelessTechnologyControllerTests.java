@@ -23,7 +23,7 @@ import static org.mockito.BDDMockito.given;
 
 /**
  * Created by kostya.nikitin on 8/11/2016.
- * Duplicated test. Run without mvc perform
+ * Duplicate test. Run without mvc perform
 */
 @RunWith(SpringRunner.class)
 @SpringBootTest

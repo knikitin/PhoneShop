@@ -43,7 +43,6 @@ public class PhonesServiceImpl implements PhonesService{
         this.resourceLoader = resourceLoader;
     }
 
-    @Override
     public String getNameForFileWithPhoneImage(long id){
         return Long.toString(id, 16)+".jpg";
     }
