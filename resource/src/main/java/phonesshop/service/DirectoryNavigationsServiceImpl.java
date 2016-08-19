@@ -1,5 +1,6 @@
 package phonesshop.service;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import phonesshop.domain.DirectoryNavigations;
@@ -12,6 +13,7 @@ import java.util.List;
  */
 @Service
 public class DirectoryNavigationsServiceImpl implements DirectoryNavigationsService {
+    private static final Logger logger = Logger.getLogger("forPhonesShop");
 
     @Autowired
     DirectoryNavigationsRepository repository;
@@ -24,7 +26,9 @@ public class DirectoryNavigationsServiceImpl implements DirectoryNavigationsServ
     @Override
     public DirectoryNavigations addOneNavigation(DirectoryNavigations oneNavigation){
         DirectoryNavigations oneDN = new DirectoryNavigations(oneNavigation.getTypeNavigation());
-        return repository.saveAndFlush(oneDN);
+        oneDN = repository.saveAndFlush(oneDN);
+        logger.debug("Done ( oneNavigation = " + oneNavigation + " ) = " + oneDN);
+        return oneDN;
     };
 
     @Override
@@ -32,8 +36,11 @@ public class DirectoryNavigationsServiceImpl implements DirectoryNavigationsServ
         DirectoryNavigations oneDN = repository.findOne(id);
         if (oneDN != null) {
             oneDN.setTypeNavigation(oneNavigation.getTypeNavigation());
-            return repository.saveAndFlush(oneDN);
+            oneDN = repository.saveAndFlush(oneDN);
+            logger.debug("Done ( id = " + id + ", oneNavigation = " + oneNavigation + " ) = " + oneDN);
+            return oneDN;
         }
+        logger.error("Not found ( id = " + id + ", oneNavigation = " + oneNavigation + " ) in DB");
         return null;
     };
 
@@ -45,6 +52,7 @@ public class DirectoryNavigationsServiceImpl implements DirectoryNavigationsServ
     @Override
     public void deleteOneNavigation(long id){
         repository.delete(id);
+        logger.debug("Done ( id = " +id + ")");
     };
 
 }

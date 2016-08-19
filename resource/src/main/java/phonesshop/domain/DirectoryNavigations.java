@@ -52,4 +52,11 @@ public class DirectoryNavigations {
         this.phones = phones;
     }
 
+    @Override
+    public String toString() {
+        return "DirectoryNavigations{" +
+                "id=" + id +
+                ", typeNavigation='" + typeNavigation + '\'' +
+                '}';
+    }
 }

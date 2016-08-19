@@ -17,7 +17,7 @@ public class FilesOperationsServiceImpl implements FilesOperationsService{
 
     @Override
     public boolean exists(File file){
-        logger.debug("Test existing of file :"+file.getName());
+        logger.trace("Test existing of file :"+file.getName());
         return file.exists();
     };
 
@@ -34,11 +34,12 @@ public class FilesOperationsServiceImpl implements FilesOperationsService{
                 new FileOutputStream(new File(filename)));
         FileCopyUtils.copy(file.getInputStream(), stream);
         stream.close();
+        logger.debug("Done saving the file:"+filename);
    };
 
     @Override
     public String getToString(String ROOT, String filename){
-        logger.debug("Get the file:"+filename);
+        logger.trace("Get the file:"+filename);
         return Paths.get(ROOT,filename).toString();
    };
 

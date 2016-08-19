@@ -52,4 +52,11 @@ public class WirelessTechnology {
         this.phones = phones;
     }
 
+    @Override
+    public String toString() {
+        return "WirelessTechnology{" +
+                "technology='" + technology + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

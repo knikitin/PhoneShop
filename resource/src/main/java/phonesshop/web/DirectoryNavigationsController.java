@@ -31,10 +31,10 @@ public class DirectoryNavigationsController {
                 logger.warn("Request to get DirectoryNavigations with id =" + id + " is not completed. DirectoryNavigations is not found");
             }
             else
-                logger.debug("DirectoryNavigations with id =" + id + " was found and was returned");
+                logger.debug("Done (id =" + id + ") = " + oneDN);
             return oneDN;
         } catch (Exception e) {
-            logger.error(" In getOne Directory Navigations: " + e.getMessage());
+            logger.error("Parameter (id = " + id +  "). Error " + e.getClass() + " with message " + e.getMessage());
             throw e;
         }
     }
@@ -43,10 +43,11 @@ public class DirectoryNavigationsController {
     @RequestMapping(method= RequestMethod.POST)
     public DirectoryNavigations addOneNavigation(@RequestBody DirectoryNavigations oneNavigation) throws Exception {
         try {
-            logger.debug("Add new Navigations with name =" + oneNavigation.getTypeNavigation() );
-            return directoryNavigationsService.addOneNavigation(oneNavigation);
+            DirectoryNavigations oneDN = directoryNavigationsService.addOneNavigation(oneNavigation);
+            logger.debug(" Done (" + oneNavigation + ") = " + oneDN );
+            return oneDN;
         } catch (Exception e) {
-            logger.error(" In addOne Directory Navigations: " + e.getMessage());
+            logger.error("Parameter ( navigation = " + oneNavigation + "). Error " + e.getClass() + " with message " + e.getMessage());
             throw e;
         }
     }
@@ -55,13 +56,16 @@ public class DirectoryNavigationsController {
     @RequestMapping(value="/{id:[\\d]+}", method= RequestMethod.PUT)
     public DirectoryNavigations updateOneNavigation(@PathVariable long id, @RequestBody DirectoryNavigations navigation, HttpServletResponse response) throws Exception {
         try {
-            logger.debug("Update Navigations with id =" + id );
             DirectoryNavigations oneDN = directoryNavigationsService.updateOneNavigation(id, navigation);
-            if ( null == oneDN )
+            if ( null == oneDN ){
                 response.setStatus( HttpStatus.NO_CONTENT.value());
+                logger.error("Not updated ( id = " + id + ", navigation = " + navigation + " ). Return null from service layer.");
+            }
+            else
+                logger.debug("Done ( id  = " + id +  " , navigation = " + navigation + ")" );
             return oneDN;
         } catch (Exception e) {
-            logger.error(" In updateOne Directory Navigations: " + e.getMessage());
+            logger.error("Parameters ( id  = " + id +  " , navigation = " + navigation + "). Error " + e.getClass() + " with message " + e.getMessage());
             throw e;
         }
     }
@@ -69,10 +73,9 @@ public class DirectoryNavigationsController {
     @RequestMapping( method= RequestMethod.GET)
     public List<DirectoryNavigations> findAllDirectoryNavigations() throws Exception {
         try {
-            logger.debug("Get Directory Navigations list.");
             return directoryNavigationsService.findAll() ;
         } catch (Exception e) {
-            logger.error(" In find Directory Navigations: " + e.getMessage());
+            logger.error(" Error " + e.getClass() + " with message " + e.getMessage());
             throw e;
         }
     };
@@ -81,10 +84,10 @@ public class DirectoryNavigationsController {
     @RequestMapping(value = "/{id:[\\d]+}", method = RequestMethod.DELETE)
     public void deleteOneNavigation(@PathVariable long id) {
         try {
-            logger.debug("Delete Directory Navigations with id =" + id );
             directoryNavigationsService.deleteOneNavigation(id);
+            logger.debug("Done (id =" + id + " )");
         } catch (Exception e) {
-            logger.error(" In deleteOne Directory Navigations: " + e.getMessage());
+            logger.error(" Parameter ( id  = " + id + " ). Error " + e.getClass() + " with message " + e.getMessage());
             throw e;
         }
     }

@@ -43,7 +43,7 @@ public class PhonesServiceImpl implements PhonesService{
         this.resourceLoader = resourceLoader;
     }
 
-    public String getNameForFileWithPhoneImage(long id){
+    private String getNameForFileWithPhoneImage(long id){
         return Long.toString(id, 16)+".jpg";
     }
 
@@ -54,14 +54,20 @@ public class PhonesServiceImpl implements PhonesService{
         try {
             File f1 = new File(ROOT + "/" + filename);
             if (filesOperationsService.exists(f1)) {
-                if (filesOperationsService.delete(f1))
+                if (filesOperationsService.delete(f1)){
+                    logger.debug("Done (id = " + id +")");
                     return "ok";
-                else
+                }
+                else{
+                    logger.debug("Failed (id = " + id +" ). File name = " + filename);
                     return "You failed to delete " + filename;
+                }
             } else {
+                logger.debug("Not found (id = " + id +" ). File name = " + filename);
                 return "notFound";
             }
         } catch (Exception e) {
+            logger.error("Error (id = " + id +" ). File name = " + filename + ". Error class " + e.getClass() + " with message :" + e.getMessage());
             return "notFound";
         }
     }
@@ -69,18 +75,15 @@ public class PhonesServiceImpl implements PhonesService{
     @Override
     public boolean uploadImgPhone(MultipartFile file, long id) throws IOException {
         String filename =  getNameForFileWithPhoneImage(id);
-        logger.debug("Upload image for phone with id =" + id );
 
         if (!file.isEmpty()) {
             try {
-                logger.debug("Image not empty for phone with id =" + id );
-
                 filesOperationsService.copy(file, ROOT +"/"+ filename);
-                logger.debug("Image save for phone with id =" + id );
+                logger.debug("Done (id =" + id + " ). File name = " + filename);
                 return true;
             }
             catch (Exception e) {
-                logger.debug("Error upload for phone with id =" + id +". Error:" + e.getMessage());
+                logger.error("Error (id =" + id +" ). Error class " + e.getClass() + " with message :" + e.getMessage());
                 throw e;
             }
         }
@@ -94,9 +97,9 @@ public class PhonesServiceImpl implements PhonesService{
     @Override
     @Transactional
     public void deletePhone(long id){
-        logger.debug("Delete image for phone with id =" + id );
         deleteImgPhone(id);
         phonesRepository.delete(id);
+        logger.debug("Done ( id =" + id + " )");
     }
 
     private String getNameFileWithPhoneImage(long id){
@@ -115,15 +118,20 @@ public class PhonesServiceImpl implements PhonesService{
 
     @Override
     public Phones updatePhone(Phones phone){
-        return phonesRepository.saveAndFlush(phone);
+        Phones onePhone = phonesRepository.saveAndFlush(phone);
+        logger.debug("Done ( phone =" + phone + " ) = " + onePhone);
+        return onePhone;
     }
 
     @Override
     public Phones updateExistingPhone(Phones phone){
         Phones onePhone = findOne(phone.getId());
         if (onePhone != null){
-            return updatePhone(phone);
+            onePhone = updatePhone(phone);
+            logger.debug("Done ( phone =" + phone + " ) = " + onePhone);
+            return onePhone;
         }
+        logger.error("Error. Not found ( phone =" + phone + " )" );
         return null;
     };
 

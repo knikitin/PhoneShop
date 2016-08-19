@@ -23,10 +23,15 @@ public class PhonesListController {
     @RequestMapping("/phoneslist/page{cur:[\\d]+}for{countonpage:[\\d]+}")
     public PagePhonesListForWeb findAllPage(@PathVariable int cur, @PathVariable int countonpage) throws Exception {
         try {
-            logger.debug("Get page " + cur + " phones list. Count phones on page is " + countonpage);
-            return phonesService.findAllPage(cur, countonpage);
+            PagePhonesListForWeb pagePhonesListForWeb = phonesService.findAllPage(cur, countonpage);
+            if (pagePhonesListForWeb != null){
+                logger.debug("Get page " + cur + " phones list. Count phones on page is " + countonpage + ". All of page for this request = "  + pagePhonesListForWeb.getPageCount());
+            } else {
+                logger.debug("Get page " + cur + " phones list. Count phones on page is " + countonpage + ". But no page in answer. " );
+            }
+            return pagePhonesListForWeb;
         } catch (IllegalArgumentException e) {
-            logger.error(" In find All pages: " + e.getMessage());
+            logger.error(" Parameters ( current page = " + cur + " , count phones on page = " + countonpage + " ). Error " + e.getClass() + " with message " + e.getMessage());
             throw e;
         }
     };

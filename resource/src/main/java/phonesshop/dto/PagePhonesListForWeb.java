@@ -22,4 +22,18 @@ public class PagePhonesListForWeb {
         return pageCount;
     }
 
+    @Override
+    public String toString() {
+        if (phonesList != null)
+            return "PagePhonesListForWeb{" +
+                "phonesList.size=" + phonesList.size() +
+                ", pageCount=" + pageCount +
+                '}';
+        else
+            return "PagePhonesListForWeb{" +
+                    "phonesList = null"   +
+                    ", pageCount=" + pageCount +
+                    '}';
+
+    }
 }

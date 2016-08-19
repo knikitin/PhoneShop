@@ -8,7 +8,6 @@ import java.util.Set;
 
 @Entity
 public class Phones {
-//    private static final Logger logger = Logger.getLogger("forPhonesShop");
 
     private long id;
 
@@ -228,4 +227,12 @@ public class Phones {
         this.wirelessTechnology = wirelessTechnology;
     }
 
+    @Override
+    public String toString() {
+        return "Phones{" +
+                "id=" + id +
+                ", model='" + model + '\'' +
+                ", brand='" + brand + '\'' +
+                '}';
+    }
 }

@@ -34,10 +34,10 @@ public class WirelessTechnologyController {
                 logger.warn("Request to get Wireless Technology with id =" + id + " is not completed. Wireless Technology is not found");
             }
             else
-                logger.debug("WirelessTechnology with id =" + id + " was found and was returned");
+                logger.debug("Done (id =" + id + ") = " + oneWT);
             return oneWT;
         } catch (Exception e) {
-            logger.error(" In getOne Wireless Technology: " + e.getMessage());
+            logger.error("Parameter (id = " + id +  "). Error " + e.getClass() + " with message " + e.getMessage());
             throw e;
         }
     }
@@ -46,10 +46,11 @@ public class WirelessTechnologyController {
     @RequestMapping(method= RequestMethod.POST)
     public WirelessTechnology addOneWireless(@RequestBody WirelessTechnology wirelessTechnology) throws Exception {
         try {
-            logger.debug("Add new Wireless Technology with name =" + wirelessTechnology.getTechnology() );
-            return wirelessTechnologyService.addOneTechnology(wirelessTechnology);
+            WirelessTechnology oneWT = wirelessTechnologyService.addOneTechnology(wirelessTechnology);
+            logger.debug(" Done (" + wirelessTechnology + ") = " + oneWT );
+            return oneWT;
         } catch (Exception e) {
-            logger.error(" In addOne Wireless Technology: " + e.getMessage());
+            logger.error("Parameter ( wireless technology = " + wirelessTechnology + "). Error " + e.getClass() + " with message " + e.getMessage());
             throw e;
         }
     }
@@ -60,11 +61,14 @@ public class WirelessTechnologyController {
         try {
             logger.debug("Update Wireless Technology with id =" + id );
             WirelessTechnology oneWT = wirelessTechnologyService.updateOneTechnology(id, wirelessTechnology);
-            if ( null == oneWT )
+            if ( null == oneWT ){
+                logger.error("Not updated ( id = " + id + ", wireless technology = " + wirelessTechnology + " ). Return null from service layer.");
                 response.setStatus( HttpStatus.NO_CONTENT.value());
+            } else
+                logger.debug("Done ( id  = " + id +  " , wireless technology = " + wirelessTechnology  + ")" );
             return oneWT;
         } catch (Exception e) {
-            logger.error(" In updateOne Wireless Technology: " + e.getMessage());
+            logger.error("Parameters ( id  = " + id +  " , wireless technology = " + wirelessTechnology + "). Error " + e.getClass() + " with message " + e.getMessage());
             throw e;
         }
     }
@@ -72,10 +76,9 @@ public class WirelessTechnologyController {
     @RequestMapping( method= RequestMethod.GET)
     public List<WirelessTechnology> findAllWirelessTechnology() throws Exception {
         try {
-            logger.debug("Get Wireless Technology list.");
             return wirelessTechnologyService.findAll() ;
         } catch (Exception e) {
-            logger.error(" In find Wireless Technology: " + e.getMessage());
+            logger.error(" Error " + e.getClass() + " with message " + e.getMessage());
             throw e;
         }
     };
@@ -84,10 +87,10 @@ public class WirelessTechnologyController {
     @RequestMapping(value = "/{id:[\\d]+}", method = RequestMethod.DELETE)
     public void deleteOneWireless(@PathVariable long id) {
         try {
-            logger.debug("Delete Wireless Technology with id =" + id );
+            logger.debug("Done (id =" + id + " )");
             wirelessTechnologyService.deleteOneTechnology(id);
         } catch (Exception e) {
-            logger.error(" In deleteOne Wireless Technology: " + e.getMessage());
+            logger.error(" Parameter ( id  = " + id + " ). Error " + e.getClass() + " with message " + e.getMessage());
             throw e;
         }
     }

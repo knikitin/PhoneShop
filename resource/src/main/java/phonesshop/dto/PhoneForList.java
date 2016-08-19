@@ -82,4 +82,12 @@ public class PhoneForList {
         setCameraResolution(phones.getCameraResolution());
     }
 
+    @Override
+    public String toString() {
+        return "PhoneForList{" +
+                "Id=" + Id +
+                ", Model='" + Model + '\'' +
+                ", Brand='" + Brand + '\'' +
+                '}';
+    }
 }
